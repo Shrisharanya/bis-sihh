@@ -1,11 +1,11 @@
 export type Language = "en" | "hi";
-export type ActiveView = "search" | "audit" | "graph";
+export type ActiveView = "search" | "audit" | "graph" | "workspace";
 export type StandardStatus = "CURRENT & ACTIVE" | "WITHDRAWN" | "SUPERSEDED";
 
 export interface AlliedStandard {
   code: string;
   title: string;
-  group: "Conductor Specs" | "Armouring Material" | "Compulsory Test Methods" | "Physical tests" | "Chemical analysis";
+  group: "Conductor Specs" | "Armouring Material" | "Compulsory Test Methods" | "Physical tests" | "Chemical analysis" | "Safety Codes" | "Regulatory Orders";
   relevance: string;
   verified: boolean;
 }
@@ -95,7 +95,7 @@ export const graphKindMeta = {
 export const stats = [
   { value: "21,480", label: "Standards indexed", note: "BIS catalogue snapshot" }, { value: "1,420", label: "Active QCOs", note: "Legal orders monitored" }, { value: "0.0%", label: "Hallucination", note: "Citation-bound answers" }, { value: "READY", label: "GeM API", note: "Integration surface" },
 ];
-export const navItems = [{ id: "search" as const, index: "01", label: "Standards Search & Dossier" }, { id: "audit" as const, index: "02", label: "Tender Document Auditor" }, { id: "graph" as const, index: "03", label: "Normative Knowledge Graph" }];
+export const navItems = [{ id: "search" as const, index: "01", label: "Standards Explorer & Clause Search" }, { id: "audit" as const, index: "02", label: "Tender Document Auditor" }, { id: "graph" as const, index: "03", label: "Normative Knowledge Graph" }, { id: "workspace" as const, index: "04", label: "Officer Workspace" }];
 export const apiState: ApiState = { connected: false, lastSync: "22 Sep 2026 · 12:28 IST" };
 
 export function routeSearch(query: string): SearchResponse {
@@ -141,7 +141,7 @@ export function clauseForStandard(standard: StandardResult) { return getClauseFo
 export function clauseSourceText(standard: StandardResult) { return clauseForStandard(standard).source; }
 export function sourceCount(standard: StandardResult) { return standard.allied.length + 1; }
 export function allGroups(standard: StandardResult) { return Array.from(new Set(standard.allied.map((item) => item.group))) as AlliedStandard["group"][]; }
-export function groupDescription(group: AlliedStandard["group"]) { return ({ "Conductor Specs": "Material and construction requirements", "Armouring Material": "Mechanical protection and armour inputs", "Compulsory Test Methods": "Evidence required for acceptance", "Physical tests": "Performance and durability test methods", "Chemical analysis": "Chemical composition verification" })[group]; }
+export function groupDescription(group: AlliedStandard["group"]) { return ({ "Conductor Specs": "Material and construction requirements", "Armouring Material": "Mechanical protection and armour inputs", "Compulsory Test Methods": "Evidence required for acceptance", "Physical tests": "Performance and durability test methods", "Chemical analysis": "Chemical composition verification", "Safety Codes": "Electrical and product safety evidence", "Regulatory Orders": "Registration and statutory marking" })[group]; }
 export function matrixGroupCode(group: AlliedStandard["group"]) { return group === "Compulsory Test Methods" ? "TEST" : group === "Armouring Material" ? "ARM" : group === "Conductor Specs" ? "COND" : "LAB"; }
 export function matrixSummary(standard: StandardResult) { return `${standard.allied.length} allied references`; }
 export function matrixHeading() { return "Allied normative standards"; }

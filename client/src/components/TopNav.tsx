@@ -1,4 +1,4 @@
-import { Activity, BookOpenCheck, FileSearch, GitBranch, Globe2, ShieldCheck, Sparkles } from "lucide-react";
+import { Activity, BookOpenCheck, FileSearch, GitBranch, ShieldCheck, Sparkles, UserRound } from "lucide-react";
 import type { ActiveView, ApiState, Language } from "../types";
 import { liveSyncCopy, brandTitle, brandSubtitle, productScope, navItems, navAria, activeLanguageCopy } from "../types";
 
@@ -10,7 +10,7 @@ interface TopNavProps {
   api: ApiState;
 }
 
-const icons = { search: BookOpenCheck, audit: FileSearch, graph: GitBranch };
+const icons = { search: BookOpenCheck, audit: FileSearch, graph: GitBranch, workspace: UserRound };
 
 export default function TopNav({ view, setView, language, setLanguage, api }: TopNavProps) {
   return (
@@ -37,7 +37,7 @@ export default function TopNav({ view, setView, language, setLanguage, api }: To
           <button className={language === "en" ? "selected" : ""} onClick={() => setLanguage("en")}>EN</button>
           <button className={language === "hi" ? "selected" : ""} onClick={() => setLanguage("hi")}>हिन्दी</button>
         </div>
-        <button className="avatar-button" aria-label="Procurement officer profile"><span>PO</span><Sparkles size={12} /></button>
+        <button className="avatar-button" aria-label="S. Sharma, Executive Engineer, PWD GeM Officer"><span>SS</span><Sparkles size={12} /></button>
       </div>
     </header>
   );
