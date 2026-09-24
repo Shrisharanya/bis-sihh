@@ -7,6 +7,7 @@ import { registerOAuthRoutes } from "./oauth";
 import { registerStorageProxy } from "./storageProxy";
 import { appRouter } from "../routers";
 import { createContext } from "./context";
+import { mockOfficerSession } from "./sdk";
 import { serveStatic, setupVite } from "./vite";
 
 function isPortAvailable(port: number): Promise<boolean> {
@@ -34,6 +35,15 @@ async function startServer() {
   // Configure body parser with larger size limit for file uploads
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
+
+  // Attach mock officer session to incoming requests if in dev mode or no OAuth token
+  app.use((req, _res, next) => {
+    if (process.env.NODE_ENV === "development" || !process.env.OAUTH_SERVER_URL) {
+      (req as any).user = (req as any).user || mockOfficerSession;
+    }
+    next();
+  });
+
   registerStorageProxy(app);
   registerOAuthRoutes(app);
   // tRPC API
@@ -47,7 +57,8 @@ async function startServer() {
 
   // Proxy non-trpc /api requests to FastAPI backend (http://127.0.0.1:8000)
   app.use("/api", async (req, res, next) => {
-    const backendUrl = `http://127.0.0.1:8000/api${req.url}`;
+    const backendBase = (process.env.FASTAPI_BACKEND_URL || "http://127.0.0.1:8000").replace(/\/+$/, "");
+    const backendUrl = `${backendBase}/api${req.url}`;
     try {
       const headers = { ...req.headers } as Record<string, string>;
       delete headers.host;

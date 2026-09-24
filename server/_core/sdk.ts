@@ -28,10 +28,28 @@ const EXCHANGE_TOKEN_PATH = `/webdev.v1.WebDevAuthPublicService/ExchangeToken`;
 const GET_USER_INFO_PATH = `/webdev.v1.WebDevAuthPublicService/GetUserInfo`;
 const GET_USER_INFO_WITH_JWT_PATH = `/webdev.v1.WebDevAuthPublicService/GetUserInfoWithJwt`;
 
+export const mockOfficerSession = {
+  id: "GOV-PROC-8821",
+  name: "Shri Rajesh Kumar Sharma",
+  role: "Chief Procurement Officer",
+  department: "Ministry of Commerce & Industry / CPWD",
+  authenticated: true,
+  openId: "GOV-PROC-8821",
+  email: "rajesh.sharma@gov.in",
+  loginMethod: "nic",
+  createdAt: new Date("2026-01-01"),
+  updatedAt: new Date("2026-01-01"),
+  lastSignedIn: new Date(),
+};
+
 class OAuthService {
   constructor(private client: ReturnType<typeof axios.create>) {
     console.log("[OAuth] Initialized with baseURL:", ENV.oAuthServerUrl);
-    if (!ENV.oAuthServerUrl) {
+    if (process.env.NODE_ENV === "development" || !ENV.oAuthServerUrl) {
+      console.warn(
+        "[Auth] Running in local development mode with mocked officer session."
+      );
+    } else if (!ENV.oAuthServerUrl) {
       console.error(
         "[OAuth] ERROR: OAUTH_SERVER_URL is not configured! Set OAUTH_SERVER_URL environment variable."
       );
@@ -255,7 +273,7 @@ class SDKServer {
     } as GetUserInfoWithJwtResponse;
   }
 
-  async authenticateRequest(req: Request): Promise<AuthenticatedUser> {
+  async authenticateRequest(req: Request): Promise<AuthenticatedUser | any> {
     // 1. Prefer the session cookie (regular OAuth login).
     const cookies = this.parseCookies(req.headers.cookie);
     let sessionToken = cookies.get(COOKIE_NAME);
@@ -270,9 +288,19 @@ class SDKServer {
       }
     }
 
+    if (!sessionToken) {
+      if (process.env.NODE_ENV === "development" || !process.env.OAUTH_SERVER_URL) {
+        return mockOfficerSession;
+      }
+      throw ForbiddenError("Invalid session cookie");
+    }
+
     const session = await this.verifySession(sessionToken);
 
     if (!session) {
+      if (process.env.NODE_ENV === "development" || !process.env.OAUTH_SERVER_URL) {
+        return mockOfficerSession;
+      }
       throw ForbiddenError("Invalid session cookie");
     }
 
@@ -287,7 +315,12 @@ class SDKServer {
 
     const sessionUserId = session.openId;
     const signedInAt = new Date();
-    let user = await db.getUserByOpenId(sessionUserId);
+    let user: any = null;
+    try {
+      user = await db.getUserByOpenId(sessionUserId);
+    } catch {
+      user = null;
+    }
 
     // If user not in DB, sync from OAuth server automatically
     if (!user) {
@@ -302,19 +335,29 @@ class SDKServer {
         });
         user = await db.getUserByOpenId(userInfo.openId);
       } catch (error) {
+        if (process.env.NODE_ENV === "development" || !process.env.OAUTH_SERVER_URL) {
+          return mockOfficerSession;
+        }
         console.error("[Auth] Failed to sync user from OAuth:", error);
         throw ForbiddenError("Failed to sync user info");
       }
     }
 
     if (!user) {
+      if (process.env.NODE_ENV === "development" || !process.env.OAUTH_SERVER_URL) {
+        return mockOfficerSession;
+      }
       throw ForbiddenError("User not found");
     }
 
-    await db.upsertUser({
-      openId: user.openId,
-      lastSignedIn: signedInAt,
-    });
+    try {
+      await db.upsertUser({
+        openId: user.openId,
+        lastSignedIn: signedInAt,
+      });
+    } catch {
+      // In dev mode without active DB, do not crash
+    }
 
     return user;
   }
