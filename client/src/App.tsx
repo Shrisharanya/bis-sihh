@@ -6,5 +6,5 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 
 export default function App() {
-  return <ErrorBoundary><ThemeProvider defaultTheme="dark" switchable><TooltipProvider><CursorGlow /><Toaster /><Home /></TooltipProvider></ThemeProvider></ErrorBoundary>;
+  return <ErrorBoundary><ThemeProvider defaultTheme="dark"><TooltipProvider><CursorGlow /><Toaster /><Home /></TooltipProvider></ThemeProvider></ErrorBoundary>;
 }
