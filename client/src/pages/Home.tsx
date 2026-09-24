@@ -39,21 +39,35 @@ export default function Home() {
 
   useEffect(() => { void apiHealth().then((connected) => setApi((current) => ({ ...current, connected }))); }, []);
 
-  const runSearch = async () => {
-    if (!query.trim()) return;
+  const runSearch = async (overrideQuery?: string) => {
+    const activeQuery = (overrideQuery ?? query).trim();
+    if (!activeQuery) return;
     setLoading(true);
-    const selectedDomain = searchDomainFilter === "all" ? searchDomain(query) : searchDomainFilter;
-    const result = searchDomainFilter === "all" ? await apiSearch(query, language) : { primary: domainStandards[selectedDomain], matchedOn: [domainLabels[selectedDomain], domainStandards[selectedDomain].code] };
+    const selectedDomain = searchDomainFilter === "all" ? undefined : searchDomainFilter;
+    const filters = {
+      domain: selectedDomain,
+      qcoOnly: qcoOnly ? true : undefined,
+      schemeType: isiOnly ? "ISI" : crsOnly ? "CRS" : undefined,
+      clauseCategory: clause !== "all" ? clause : undefined,
+    };
+    const result = await apiSearch(activeQuery, language, filters);
     setStandard(result.primary);
     setMatchedOn(result.matchedOn.length ? result.matchedOn : ["BIS", "current reference"]);
-    const hasFilterMatch = clauseMatches(result.primary, clause) && (!qcoOnly || Boolean(result.primary.qco)) && (!isiOnly || result.primary.scheme.includes("ISI")) && (!crsOnly || selectedDomain === "electronics");
+    const hasFilterMatch = clauseMatches(result.primary, clause) && (!qcoOnly || Boolean(result.primary.qco)) && (!isiOnly || result.primary.scheme.includes("ISI")) && (!crsOnly || searchDomainFilter === "electronics");
     setFilterNotice(hasFilterMatch ? "Filters resolved against this source" : "No exact clause/filter match — showing nearest source record");
     setLoading(false);
   };
 
   const loadDraft = (standardCode: string) => {
     const domain = Object.entries(domainStandards).find(([, item]) => item.code === standardCode)?.[0] as DomainKey | undefined;
-    if (domain) { setStandard(domainStandards[domain]); setQuery(domain === "cables" ? "3.5 core XLPE cable 1.1kV" : domainLabels[domain]); setSearchDomainFilter(domain); setView("search"); }
+    if (domain) {
+      setStandard(domainStandards[domain]);
+      const newQuery = domain === "cables" ? "3.5 core XLPE cable 1.1kV" : domainLabels[domain];
+      setQuery(newQuery);
+      setSearchDomainFilter(domain);
+      setView("search");
+      void runSearch(newQuery);
+    }
   };
 
   return <div className="app-shell"><TopNav view={view} setView={setView} language={language} setLanguage={setLanguage} api={api} /><main className="app-main">

@@ -1,15 +1,65 @@
 import { ArrowRight, CircleDot, FileCheck2, Gavel, GitBranch, Info, Link2, ShieldCheck, TestTube2, X } from "lucide-react";
-import type { GraphNode } from "../types";
-import { graphColor, graphKindMeta, graphNodeCode, graphTypeName, selectedGraphDetail, graphNodeIcon, graphInspectorPrompt, graphInspectorTitle, graphAccessibleText } from "../types";
+import { useEffect, useState } from "react";
+import type { GraphEdge, GraphNode } from "../types";
+import {
+  apiGetGraph,
+  graphAccessibleText,
+  graphColor,
+  graphInspectorPrompt,
+  graphInspectorTitle,
+  graphKindMeta,
+  graphNodeCode,
+  graphNodeIcon,
+  graphTypeName,
+  selectedGraphDetail,
+} from "../types";
 import type { DomainKey } from "../mockData";
 import { domainLabels, domainShortLabels, graphByDomain } from "../mockData";
 
-interface KnowledgeGraphProps { selectedNode: string; setSelectedNode: (id: string) => void; domain: DomainKey; setDomain: (domain: DomainKey) => void; }
+interface KnowledgeGraphProps {
+  selectedNode: string;
+  setSelectedNode: (id: string) => void;
+  domain: DomainKey;
+  setDomain: (domain: DomainKey) => void;
+}
 
-export default function KnowledgeGraph({ selectedNode, setSelectedNode, domain, setDomain }: KnowledgeGraphProps) {
-  const graph = graphByDomain[domain];
-  const selected = graph.nodes.find((node) => node.id === selectedNode) ?? graph.nodes[0];
-  const nodePoint = (node: GraphNode) => ({ x: node.x * 7.2 + 20, y: node.y * 4.65 + 18 });
+export default function KnowledgeGraph({
+  selectedNode,
+  setSelectedNode,
+  domain,
+  setDomain,
+}: KnowledgeGraphProps) {
+  const [graphData, setGraphData] = useState<{ nodes: GraphNode[]; edges: GraphEdge[] }>(
+    graphByDomain[domain]
+  );
+
+  useEffect(() => {
+    let isCurrent = true;
+    void apiGetGraph(domain).then((live) => {
+      if (isCurrent && live && live.nodes && live.nodes.length > 0) {
+        setGraphData(live);
+      } else if (isCurrent) {
+        setGraphData(graphByDomain[domain]);
+      }
+    });
+    return () => {
+      isCurrent = false;
+    };
+  }, [domain]);
+
+  const graph = graphData || graphByDomain[domain];
+  const selected = graph.nodes.find((node) => node.id === selectedNode) ?? graph.nodes[0] ?? {
+    id: "primary",
+    label: "Primary Standard",
+    kind: "primary" as const,
+    x: 50,
+    y: 50,
+    detail: "Primary standard reference",
+  };
+  const nodePoint = (node?: GraphNode) => ({
+    x: (node?.x ?? 50) * 7.2 + 20,
+    y: (node?.y ?? 50) * 4.65 + 18,
+  });
   return <section className="graph-view">
     <div className="view-heading-row"><div><div className="section-kicker"><span className="kicker-dot purple-dot" /> GRAPH / CITATION LOCKED</div><h1>Normative knowledge graph</h1><p>Trace every standard, test method, material input and legal order across four procurement domains.</p></div><div className="graph-heading-stats"><span><strong>{graph.nodes.length}</strong> nodes</span><span><strong>{graph.edges.length}</strong> directed edges</span><span><ShieldCheck size={14} /> verified</span></div></div>
     <div className="domain-selector"><div className="domain-selector-label"><GitBranch size={14} /> SELECT DOMAIN</div>{(Object.keys(domainLabels) as DomainKey[]).map((key) => <button className={domain === key ? "active" : ""} key={key} onClick={() => { setDomain(key); setSelectedNode("primary"); }}><span className="mono">0{(Object.keys(domainLabels) as DomainKey[]).indexOf(key) + 1}</span>{domainLabels[key]}<small>{domainShortLabels[key]}</small></button>)}</div>

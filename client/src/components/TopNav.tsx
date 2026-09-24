@@ -37,7 +37,16 @@ export default function TopNav({ view, setView, language, setLanguage, api }: To
           <button className={language === "en" ? "selected" : ""} onClick={() => setLanguage("en")}>EN</button>
           <button className={language === "hi" ? "selected" : ""} onClick={() => setLanguage("hi")}>हिन्दी</button>
         </div>
-        <button className="avatar-button" aria-label="S. Sharma, Executive Engineer, PWD GeM Officer"><span>SS</span><Sparkles size={12} /></button>
+        <button
+          type="button"
+          className="avatar-button"
+          onClick={() => setView("workspace")}
+          aria-label="S. Sharma, Executive Engineer, PWD GeM Officer - View Workspace"
+          title="Open Officer Workspace"
+        >
+          <span>SS</span>
+          <Sparkles size={12} />
+        </button>
       </div>
     </header>
   );

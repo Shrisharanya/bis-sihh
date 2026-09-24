@@ -104,28 +104,210 @@ export function routeSearch(query: string): SearchResponse {
   return { primary: isCable ? fallbackCable : fallbackCement, matchedOn: isCable ? ["XLPE", "cable", "1.1 kV", "IS 7098"] : ["cement", "53 grade", "IS 12269"] };
 }
 
-export async function apiSearch(query: string, language: Language): Promise<SearchResponse> {
+export interface SearchFilters {
+  domain?: string;
+  qcoOnly?: boolean;
+  schemeType?: string;
+  clauseCategory?: string;
+}
+
+export const API_BASE = (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_URL)
+  ? (import.meta.env.VITE_API_URL as string).replace(/\/$/, "")
+  : "/api";
+
+async function apiFetch(endpoint: string, options?: RequestInit): Promise<Response> {
+  const cleanEndpoint = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
+  const url = `${API_BASE}${cleanEndpoint}`;
   try {
-    const response = await fetch("http://localhost:8000/api/search", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ query, language }) });
+    const res = await fetch(url, options);
+    if (!res.ok && res.status >= 500) {
+      throw new Error(`Server returned ${res.status}`);
+    }
+    return res;
+  } catch (err) {
+    // If relative `/api` failed (e.g. dev server without proxy running), attempt direct port 8000
+    if (url.startsWith("/api")) {
+      const directUrl = `http://127.0.0.1:8000/api${cleanEndpoint}`;
+      return await fetch(directUrl, options);
+    }
+    throw err;
+  }
+}
+
+export async function apiSearch(
+  query: string,
+  language: Language,
+  filters?: SearchFilters
+): Promise<SearchResponse> {
+  try {
+    const payload = {
+      query,
+      language,
+      domain: filters?.domain && filters.domain !== "all" ? filters.domain : undefined,
+      qco_only: filters?.qcoOnly || undefined,
+      scheme_type: filters?.schemeType || undefined,
+      clause_category: filters?.clauseCategory && filters.clauseCategory !== "all" ? filters.clauseCategory : undefined,
+    };
+    const response = await apiFetch("/search", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
     if (!response.ok) throw new Error("API unavailable");
     const data = await response.json();
     return { primary: data.primary as StandardResult, matchedOn: data.matched_on ?? [] };
-  } catch { return routeSearch(query); }
+  } catch {
+    return routeSearch(query);
+  }
 }
+
 export async function apiAudit(file?: File): Promise<AuditResponse> {
   try {
-    const form = new FormData(); if (file) form.append("file", file);
-    const response = await fetch("http://localhost:8000/api/audit-tender", { method: "POST", body: form });
-    if (!response.ok) throw new Error("API unavailable"); return await response.json() as AuditResponse;
-  } catch { return fallbackAudit; }
+    const form = new FormData();
+    if (file) form.append("file", file);
+    const response = await apiFetch("/audit-tender", { method: "POST", body: form });
+    if (!response.ok) throw new Error("API unavailable");
+    return (await response.json()) as AuditResponse;
+  } catch {
+    return fallbackAudit;
+  }
 }
+
+export async function apiAuditCorrected(): Promise<AuditResponse> {
+  try {
+    const response = await apiFetch("/audit-tender/corrected", { method: "POST" });
+    if (!response.ok) throw new Error("API unavailable");
+    return (await response.json()) as AuditResponse;
+  } catch {
+    return getAuditWithCorrection(true);
+  }
+}
+
 export async function apiHealth(): Promise<boolean> {
-  try { return (await fetch("http://localhost:8000/api/health", { signal: AbortSignal.timeout(900) })).ok; } catch { return false; }
+  try {
+    const res = await apiFetch("/health", { signal: AbortSignal.timeout(1200) });
+    return res.ok;
+  } catch {
+    return false;
+  }
 }
+
+export async function apiGetGraph(domain: string): Promise<{ nodes: GraphNode[]; edges: GraphEdge[] } | null> {
+  try {
+    const res = await apiFetch(`/graph/${domain}`);
+    if (!res.ok) throw new Error("Graph API error");
+    const data = await res.json();
+    return { nodes: data.nodes, edges: data.edges };
+  } catch {
+    return null;
+  }
+}
+
+export async function apiGetWorkspace(): Promise<{ officer: any; drafts: any[]; audit_history: any[]; stats: any } | null> {
+  try {
+    const res = await apiFetch("/officer/workspace");
+    if (!res.ok) throw new Error("Workspace API error");
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
+export async function apiSaveDraft(draft: {
+  project_name: string;
+  standard_code: string;
+  clause_heading: string;
+  clause_body: string;
+  domain?: string;
+  officer_notes?: string;
+}): Promise<any> {
+  try {
+    const res = await apiFetch("/officer/drafts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(draft),
+    });
+    if (!res.ok) throw new Error("Failed to save draft");
+    return await res.json();
+  } catch (e) {
+    console.warn("apiSaveDraft failed, continuing in mock mode", e);
+    return null;
+  }
+}
+
+export async function apiDeleteDraft(draftId: string): Promise<boolean> {
+  try {
+    const res = await apiFetch(`/officer/drafts/${draftId}`, { method: "DELETE" });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
+export async function apiGetAuditHistory(): Promise<any[] | null> {
+  try {
+    const res = await apiFetch("/officer/audit-history");
+    if (!res.ok) throw new Error("Audit history API error");
+    const data = await res.json();
+    return data.history ?? [];
+  } catch {
+    return null;
+  }
+}
+
+export async function apiExportClause(payload: {
+  standard_code: string;
+  clause_heading: string;
+  clause_body: string;
+  domain?: string;
+  format?: string;
+}): Promise<any> {
+  try {
+    const res = await apiFetch("/export/clause", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    if (res.ok) return await res.json();
+  } catch {
+    // handled gracefully
+  }
+  return null;
+}
+
+export async function apiCopilotQuery(prompt: string, domain?: string, language?: Language): Promise<any> {
+  try {
+    const res = await apiFetch("/copilot/query", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt, domain, language: language || "en" }),
+    });
+    if (res.ok) return await res.json();
+  } catch {
+    // fallback
+  }
+  return null;
+}
+
 export function getAuditWithCorrection(corrected: boolean): AuditResponse {
   if (!corrected) return fallbackAudit;
-  return { ...fallbackAudit, items: fallbackAudit.items.map((item) => item.status === "critical" ? { ...item, standard: "IS 694 : 2010 + Amd. 1 to 4", status: "compliant", finding: "Draft corrected: current reference inserted and fire test requirement restored.", recommendation: "Review the generated clause, then issue the updated tender version." } : item), summary: { critical: 0, compliant: 2, coverage: "100%" } };
+  return {
+    ...fallbackAudit,
+    items: fallbackAudit.items.map((item) =>
+      item.status === "critical"
+        ? {
+            ...item,
+            standard: "IS 694 : 2010 + Amd. 1 to 4",
+            status: "compliant",
+            finding: "Draft corrected: current reference inserted and fire test requirement restored.",
+            recommendation: "Review the generated clause, then issue the updated tender version.",
+          }
+        : item
+    ),
+    summary: { critical: 0, compliant: 2, coverage: "100%" },
+  };
 }
+
 export const defaultClause: ClauseDraft = { heading: "4.2.1  Power cable — conformity and testing", body: fallbackCable.clause, source: "Synthesized from IS 7098 (Part 1):1988 • IS 8130:2013 • IS 5831:1984 • IS 3975:1999 • IS 10810 series" };
 export const correctedClause: ClauseDraft = { heading: "1.1  Cable reference — corrected tender text", body: "The bidder shall supply cables conforming to IS 694 : 2010 with Amendments 1 to 4, including low-smoke zero-halogen fire performance evidence as applicable to the installation environment. Product conformity shall be supported by current BIS licensing and batch-wise test certificates.", source: "Auto-corrected from Tender_GeM_Elect_2026.pdf • supersession graph verified" };
 
@@ -139,14 +321,53 @@ export function safeCopy(text: string) { if (typeof navigator !== "undefined" &&
 export function getClauseForStandard(standard: StandardResult): ClauseDraft { return standard.id === fallbackCement.id ? { heading: "6.1  Cement — conformity and testing", body: standard.clause, source: "Synthesized from IS 12269:2013 • IS 4031 series • IS 4032:1985" } : defaultClause; }
 export function clauseForStandard(standard: StandardResult) { return getClauseForStandard(standard); }
 export function clauseSourceText(standard: StandardResult) { return clauseForStandard(standard).source; }
-export function sourceCount(standard: StandardResult) { return standard.allied.length + 1; }
-export function allGroups(standard: StandardResult) { return Array.from(new Set(standard.allied.map((item) => item.group))) as AlliedStandard["group"][]; }
-export function groupDescription(group: AlliedStandard["group"]) { return ({ "Conductor Specs": "Material and construction requirements", "Armouring Material": "Mechanical protection and armour inputs", "Compulsory Test Methods": "Evidence required for acceptance", "Physical tests": "Performance and durability test methods", "Chemical analysis": "Chemical composition verification", "Safety Codes": "Electrical and product safety evidence", "Regulatory Orders": "Registration and statutory marking" })[group]; }
-export function matrixGroupCode(group: AlliedStandard["group"]) { return group === "Compulsory Test Methods" ? "TEST" : group === "Armouring Material" ? "ARM" : group === "Conductor Specs" ? "COND" : "LAB"; }
-export function matrixSummary(standard: StandardResult) { return `${standard.allied.length} allied references`; }
+export function sourceCount(standard: StandardResult) { return (standard?.allied?.length ?? 0) + 1; }
+
+export function allGroups(standard?: StandardResult | null): AlliedStandard["group"][] {
+  if (!standard || !Array.isArray(standard.allied)) return [];
+  const groups = standard.allied.map((item) => item?.group).filter(Boolean);
+  return Array.from(new Set(groups)) as AlliedStandard["group"][];
+}
+
+export function groupDescription(group: string): string {
+  const descMap: Record<string, string> = {
+    "Conductor Specs": "Material and construction requirements",
+    "Armouring Material": "Mechanical protection and armour inputs",
+    "Compulsory Test Methods": "Evidence required for acceptance",
+    "Physical tests": "Performance and durability test methods",
+    "Chemical analysis": "Chemical composition verification",
+    "Safety Codes": "Electrical and product safety evidence",
+    "Regulatory Orders": "Registration and statutory marking",
+    electrical_testing: "Conductor resistance & insulation tests",
+    fire_safety: "Vertical flame propagation & smoke density",
+    mechanical_specs: "Tensile, yield stress and elongation",
+    regulatory_qco: "Mandatory Quality Control Order compliance",
+    quality_assurance: "Lot sampling & conformity documentation",
+  };
+  return descMap[group] || "Normative specification requirements";
+}
+
+export function matrixGroupCode(group: string): string {
+  if (!group) return "NORM";
+  if (group === "Compulsory Test Methods") return "TEST";
+  if (group === "Armouring Material") return "ARM";
+  if (group === "Conductor Specs") return "COND";
+  if (group === "Physical tests" || group === "physical_testing") return "PHYS";
+  if (group === "Chemical analysis" || group === "chemical_analysis") return "CHEM";
+  if (group === "Safety Codes" || group === "electrical_safety" || group === "fire_safety") return "SAFE";
+  if (group === "Regulatory Orders" || group === "regulatory_qco") return "REG";
+  if (group === "mechanical_specs") return "MECH";
+  if (group === "quality_assurance") return "QA";
+  return "NORM";
+}
+
+export function matrixSummary(standard?: StandardResult | null): string {
+  return `${standard?.allied?.length ?? 0} allied references`;
+}
+
 export function matrixHeading() { return "Allied normative standards"; }
 export function matrixSubheading() { return "Grouped references resolved from the primary standard"; }
-export function sourceVerified(item: AlliedStandard) { return item.verified; }
+export function sourceVerified(item?: AlliedStandard | null): boolean { return Boolean(item?.verified); }
 export function confidenceWidth(value: number) { return `${Math.min(value, 100)}%`; }
 export function dossierBreadcrumb(standard: StandardResult) { return `Standards / ${standard.code}`; }
 export function legalBasis(standard: StandardResult) { return `${standard.qco} / ${standard.scheme}`; }

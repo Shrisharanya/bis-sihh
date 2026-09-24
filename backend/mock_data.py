@@ -1,9 +1,12 @@
 from copy import deepcopy
+from typing import Any, Dict, List, Optional
 
+# --- DOMAIN 1: CABLES ---
 CABLE = {
     "id": "is-7098-p1-1988",
     "code": "IS 7098 (Part 1) : 1988",
     "title": "Crosslinked Polyethylene Insulated Thermoplastic Sheathed Cables",
+    "domain": "cables",
     "status": "CURRENT & ACTIVE",
     "year": "1988",
     "ics": "29.060.20",
@@ -11,7 +14,9 @@ CABLE = {
     "confidence": 98.4,
     "qco": "Wires and Cables (Quality Control) Order, 2023",
     "qcoShort": "Wires & Cables QCO 2023",
+    "qco_mandatory": True,
     "scheme": "ISI Mark Scheme I",
+    "scheme_type": "ISI",
     "amendments": "Amendments 1 to 4",
     "allied": [
         {"code": "IS 8130 : 2013", "title": "Conductors for insulated electric cables", "group": "Conductor Specs", "relevance": "Conductor material, resistance and stranding", "verified": True},
@@ -21,13 +26,57 @@ CABLE = {
         {"code": "IS 10810 (Part 1)", "title": "Conductor resistance test", "group": "Compulsory Test Methods", "relevance": "Routine electrical acceptance test", "verified": True},
         {"code": "IS 10810 (Part 62)", "title": "Smoke density of cable materials", "group": "Compulsory Test Methods", "relevance": "Low-smoke performance evidence", "verified": True},
     ],
-    "clause": "The bidder shall offer 3.5 core, 1.1 kV grade XLPE insulated and PVC sheathed power cables conforming to IS 7098 (Part 1) : 1988 with Amendments 1 to 4. Conductors shall comply with IS 8130 : 2013; insulation and sheath with IS 5831 : 1984; armour, where specified, with IS 3975 : 1999. Testing shall be carried out as per the applicable IS 10810 series methods. The product shall bear the BIS Standard Mark under the Wires and Cables QCO 2023 and valid ISI licence."
+    "clauses": [
+        {
+            "clause_id": "cables-c1",
+            "clause_number": "Clause 12.1",
+            "title": "Conductor Resistance Test",
+            "category": "electrical_testing",
+            "text": "Maximum electrical resistance of conductors shall conform to IS 8130 when tested in accordance with IS 10810 (Part 1) at 20 degrees Celsius.",
+            "normative_ref": "IS 8130 / IS 10810 Part 1",
+        },
+        {
+            "clause_id": "cables-c2",
+            "clause_number": "Clause 15.3",
+            "title": "Vertical Flame Retardance Test",
+            "category": "fire_safety",
+            "text": "The cable samples shall pass vertical flame propagation test as per IS 10810 (Part 53). After the flame application period, the sample shall be self-extinguishing and the uncharred portion measured from the lower edge of the top clamp shall not be less than 50 mm.",
+            "normative_ref": "IS 10810 (Part 53)",
+        },
+        {
+            "clause_id": "cables-c3",
+            "clause_number": "Clause 16.2",
+            "title": "Smoke Density of Sheathing",
+            "category": "fire_safety",
+            "text": "Smoke density of cable materials tested in accordance with IS 10810 (Part 62) under fire conditions shall exhibit a minimum light transmittance of 60 percent.",
+            "normative_ref": "IS 10810 (Part 62)",
+        },
+        {
+            "clause_id": "cables-c4",
+            "clause_number": "Clause 9.1",
+            "title": "Armour Construction & Galvanizing",
+            "category": "mechanical_specs",
+            "text": "Armouring where specified shall be of galvanized mild steel wires or formed strips complying with IS 3975 with minimum calculated armour coverage of 90 percent.",
+            "normative_ref": "IS 3975 : 1999",
+        },
+        {
+            "clause_id": "cables-c5",
+            "clause_number": "Clause 20.1",
+            "title": "Mandatory BIS ISI Certification",
+            "category": "regulatory_qco",
+            "text": "The cable shall bear the BIS Standard Mark (ISI license) under Wires and Cables (Quality Control) Order, 2023. Cables without valid ISI mark shall be rejected.",
+            "normative_ref": "Wires and Cables QCO 2023",
+        },
+    ],
+    "clause": "The bidder shall offer 3.5 core, 1.1 kV grade XLPE insulated and PVC sheathed power cables conforming to IS 7098 (Part 1) : 1988 with Amendments 1 to 4. Conductors shall comply with IS 8130 : 2013; insulation and sheath with IS 5831 : 1984; armour, where specified, with IS 3975 : 1999. Testing shall be carried out as per the applicable IS 10810 series methods. The product shall bear the BIS Standard Mark under the Wires and Cables QCO 2023 and valid ISI licence.",
 }
 
+# --- DOMAIN 2: CEMENT ---
 CEMENT = {
     "id": "is-12269-2013",
     "code": "IS 12269 : 2013",
     "title": "Ordinary Portland Cement — 53 Grade",
+    "domain": "cement",
     "status": "CURRENT & ACTIVE",
     "year": "2013",
     "ics": "91.100.10",
@@ -35,55 +84,341 @@ CEMENT = {
     "confidence": 97.8,
     "qco": "Cement (Quality Control) Order, 2003",
     "qcoShort": "Cement QCO 2003",
+    "qco_mandatory": True,
     "scheme": "ISI Mark Scheme I",
+    "scheme_type": "ISI",
     "amendments": "Amendments 1 to 2",
     "allied": [
         {"code": "IS 4031 Series", "title": "Methods of physical tests for hydraulic cement", "group": "Physical tests", "relevance": "Fineness, soundness, setting time and strength", "verified": True},
+        {"code": "IS 4031 (Part 6)", "title": "Methods of physical tests for hydraulic cement: Compressive strength", "group": "Physical tests", "relevance": "Compressive strength determination at 3, 7, and 28 days", "verified": True},
+        {"code": "IS 4031 (Part 3)", "title": "Methods of physical tests for hydraulic cement: Soundness", "group": "Physical tests", "relevance": "Soundness by Le Chatelier and Autoclave methods", "verified": True},
         {"code": "IS 4032 : 1985", "title": "Method of chemical analysis of hydraulic cement", "group": "Chemical analysis", "relevance": "Chemical composition and loss on ignition", "verified": True},
+        {"code": "IS 4987 : 1993", "title": "Recommendations for sampling of cement", "group": "Physical tests", "relevance": "Sampling guidelines and lot acceptance criteria", "verified": True},
     ],
-    "clause": "Ordinary Portland Cement 53 Grade shall conform to IS 12269 : 2013 with Amendments 1 to 2. The supplier shall furnish a valid BIS licence and test certificates covering the chemical requirements of IS 4032 and physical tests under the IS 4031 series. Each consignment shall be accompanied by batch-wise conformity documentation."
+    "clauses": [
+        {
+            "clause_id": "cement-c1",
+            "clause_number": "Clause 6.1",
+            "title": "Compressive Strength Requirements",
+            "category": "mechanical_specs",
+            "text": "The compressive strength of mortar cubes tested in accordance with IS 4031 (Part 6) shall be: 72±1 hours (3 days) not less than 27 MPa; 168±2 hours (7 days) not less than 37 MPa; and 672±4 hours (28 days) not less than 53 MPa.",
+            "normative_ref": "IS 4031 (Part 6)",
+        },
+        {
+            "clause_id": "cement-c2",
+            "clause_number": "Clause 5.2",
+            "title": "Chemical Composition Limits",
+            "category": "chemical_analysis",
+            "text": "Chemical composition determined per IS 4032 shall meet: Insoluble residue shall not exceed 4.0 percent; total loss on ignition shall not exceed 4.0 percent; Magnesia shall not exceed 6.0 percent.",
+            "normative_ref": "IS 4032 : 1985",
+        },
+        {
+            "clause_id": "cement-c3",
+            "clause_number": "Clause 6.2",
+            "title": "Soundness and Setting Times",
+            "category": "physical_testing",
+            "text": "Soundness tested per IS 4031 (Part 3) shall not exceed 10 mm by Le Chatelier method and 0.8 percent by autoclave test. Initial setting time shall not be less than 30 minutes; final setting time not more than 600 minutes.",
+            "normative_ref": "IS 4031 (Part 3)",
+        },
+        {
+            "clause_id": "cement-c4",
+            "clause_number": "Clause 10.1",
+            "title": "Sampling Guidelines",
+            "category": "quality_assurance",
+            "text": "Representative samples for lot acceptance and testing shall be drawn in accordance with recommendations of IS 4987.",
+            "normative_ref": "IS 4987 : 1993",
+        },
+        {
+            "clause_id": "cement-c5",
+            "clause_number": "Clause 12.1",
+            "title": "Mandatory Cement QCO ISI Certification",
+            "category": "regulatory_qco",
+            "text": "Each bag or bulk container of 53 Grade OPC shall bear the BIS Standard Mark (ISI) with valid license number as mandated under the Cement (Quality Control) Order, 2003.",
+            "normative_ref": "Cement QCO 2003",
+        },
+    ],
+    "clause": "Ordinary Portland Cement 53 Grade shall conform to IS 12269 : 2013 with Amendments 1 to 2. The supplier shall furnish a valid BIS licence and test certificates covering the chemical requirements of IS 4032 and physical tests under the IS 4031 series. Each consignment shall be accompanied by batch-wise conformity documentation.",
 }
 
-GRAPH = {
-    "nodes": [
-        {"id": "primary", "label": "IS 7098 (Part 1):1988", "kind": "primary", "detail": "Primary product standard — XLPE insulated cables up to 1100 V."},
-        {"id": "conductor", "label": "IS 8130:2013", "kind": "normative_refs", "detail": "Conductor material, resistance and stranding requirements."},
-        {"id": "sheath", "label": "IS 5831:1984", "kind": "normative_refs", "detail": "PVC insulation and sheath compound requirements."},
-        {"id": "armour", "label": "IS 3975:1999", "kind": "normative_refs", "detail": "Mild steel wires, formed wires and tapes for armouring."},
-        {"id": "flame", "label": "IS 10810 Part 53", "kind": "test_methods", "detail": "Vertical flame propagation and flame retardance test method."},
-        {"id": "qco", "label": "Cables QCO 2023", "kind": "qco_mandates", "detail": "Statutory Quality Control Order — BIS Standard Mark mandatory."},
-        {"id": "old", "label": "IS 694:1990", "kind": "superseded_refs", "detail": "Withdrawn reference detected in tender draft; do not cite."},
+# --- DOMAIN 3: STEEL ---
+STEEL = {
+    "id": "is-1786-2008",
+    "code": "IS 1786 : 2008",
+    "title": "High Strength Deformed Steel Bars and Wires for Concrete Reinforcement",
+    "domain": "steel",
+    "status": "CURRENT & ACTIVE",
+    "year": "2008",
+    "ics": "77.140.15",
+    "scope": "Requirements for high strength deformed steel bars and wires for use as reinforcement in concrete. Covers nominal sizes, chemical composition, 0.2 percent proof stress, tensile strength, bend and rebend properties for grade Fe 500D.",
+    "confidence": 98.1,
+    "qco": "Steel and Steel Products (Quality Control) Order, 2024",
+    "qcoShort": "Steel & Steel Products QCO 2024",
+    "qco_mandatory": True,
+    "scheme": "ISI Mark Scheme I",
+    "scheme_type": "ISI",
+    "amendments": "Amendments 1 to 3",
+    "allied": [
+        {"code": "IS 1608 (Part 1) : 2022", "title": "Metallic materials — Tensile testing at room temperature", "group": "Physical tests", "relevance": "0.2 percent proof stress and tensile strength verification", "verified": True},
+        {"code": "IS 1599 : 2019", "title": "Metallic materials — Bend test", "group": "Physical tests", "relevance": "Bend and rebend testing around standard mandrels", "verified": True},
+        {"code": "IS 228 (Series)", "title": "Methods for chemical analysis of steels", "group": "Chemical analysis", "relevance": "Spectrometric and wet chemical analysis for C, S, P", "verified": True},
     ],
-    "edges": [
-        {"from": "primary", "to": "conductor", "label": "requires"},
-        {"from": "primary", "to": "sheath", "label": "requires"},
-        {"from": "primary", "to": "armour", "label": "requires"},
-        {"from": "primary", "to": "flame", "label": "tested by"},
-        {"from": "primary", "to": "qco", "label": "mandated by"},
-        {"from": "old", "to": "primary", "label": "superseded by"},
-    ]
+    "clauses": [
+        {
+            "clause_id": "steel-c1",
+            "clause_number": "Clause 8.1",
+            "title": "Mechanical Properties & 0.2 Percent Proof Stress",
+            "category": "mechanical_specs",
+            "text": "For Fe 500D grade, minimum 0.2 percent proof stress / yield stress shall be 500.0 N/mm²; tensile strength shall be not less than 565.0 N/mm² (minimum TS/YS ratio 1.10); elongation shall be minimum 16.0 percent and total elongation at maximum force (Agt) minimum 5.0 percent when tested per IS 1608.",
+            "normative_ref": "IS 1608 (Part 1)",
+        },
+        {
+            "clause_id": "steel-c2",
+            "clause_number": "Clause 9.1",
+            "title": "Bend and Rebend Requirements",
+            "category": "mechanical_specs",
+            "text": "Test pieces shall withstand bend test through 180 degrees without rupture or transverse cracking on outside of bent portion as per IS 1599 around specified mandrel diameter.",
+            "normative_ref": "IS 1599 : 2019",
+        },
+        {
+            "clause_id": "steel-c3",
+            "clause_number": "Clause 4.2",
+            "title": "Chemical Composition Limits",
+            "category": "chemical_analysis",
+            "text": "Chemical composition for Fe 500D analyzed per IS 228 series: Carbon max 0.25%, Sulphur max 0.040%, Phosphorus max 0.040%, and combined Sulphur + Phosphorus max 0.075%.",
+            "normative_ref": "IS 228 Series",
+        },
+        {
+            "clause_id": "steel-c4",
+            "clause_number": "Clause 11.1",
+            "title": "BIS Marking & QCO Compliance",
+            "category": "regulatory_qco",
+            "text": "Each bundle of steel bars shall carry manufacturer identification, grade Fe 500D, and BIS Standard Mark (ISI) under Steel and Steel Products (Quality Control) Order, 2024.",
+            "normative_ref": "Steel & Steel Products QCO 2024",
+        },
+    ],
+    "clause": "The contractor shall supply High Strength Deformed Steel Bars of grade Fe 500D conforming to IS 1786 : 2008 with Amendments 1 to 3. The steel shall exhibit a minimum 0.2 percent proof stress of 500 N/mm² and TS/YS ratio of at least 1.10 when tested as per IS 1608. Bend and rebend tests shall comply with IS 1599. Chemical analysis shall be verified as per IS 228 series. Product bundles shall carry valid BIS ISI marking under the Steel and Steel Products QCO 2024.",
 }
 
+# --- DOMAIN 4: ELECTRONICS ---
+ELECTRONICS = {
+    "id": "is-13252-p1-2010",
+    "code": "IS 13252 (Part 1) : 2010",
+    "title": "Information Technology Equipment — Safety: General Requirements",
+    "domain": "electronics",
+    "status": "CURRENT & ACTIVE",
+    "year": "2010",
+    "ics": "35.020",
+    "scope": "Safety requirements for mains-powered or battery-powered information technology equipment, including electrical business equipment and associated telecommunication equipment, operating up to 600 V.",
+    "confidence": 96.9,
+    "qco": "Electronics and Information Technology Goods (Requirement for Compulsory Registration) Order",
+    "qcoShort": "MeitY CRS Order",
+    "qco_mandatory": True,
+    "scheme": "MeitY Compulsory Registration Scheme (CRS)",
+    "scheme_type": "CRS",
+    "amendments": "Amendments 1 to 4",
+    "allied": [
+        {"code": "IS 616 : 2017", "title": "Audio, video and similar electronic apparatus — Safety requirements", "group": "Compulsory Test Methods", "relevance": "Audio visual safety harmonization and dielectric test", "verified": True},
+        {"code": "IS 16046 (Part 2) : 2018", "title": "Secondary cells and batteries containing alkaline or other non-acid electrolytes — Secondary lithium cells and batteries", "group": "Compulsory Test Methods", "relevance": "Lithium cells battery safety, overcharge protection, thermal testing", "verified": True},
+    ],
+    "clauses": [
+        {
+            "clause_id": "elec-c1",
+            "clause_number": "Clause 2.1",
+            "title": "Protection from Electric Shock and Energy Hazards",
+            "category": "electrical_safety",
+            "text": "Operator access areas shall be designed to prevent contact with bare parts at hazardous voltage. Creepage distances and electrical clearances shall withstand rated dielectric impulse tests.",
+            "normative_ref": "IS 13252 (Part 1)",
+        },
+        {
+            "clause_id": "elec-c2",
+            "clause_number": "Clause 4.3",
+            "title": "Battery and Secondary Lithium Cells Safety",
+            "category": "battery_safety",
+            "text": "Rechargeable secondary lithium cells and battery packs integrated into the IT equipment shall be certified to IS 16046 (Part 2) with proven safety controls preventing overcharge, thermal runaway, and reverse charging.",
+            "normative_ref": "IS 16046 (Part 2)",
+        },
+        {
+            "clause_id": "elec-c3",
+            "clause_number": "Clause 1.5",
+            "title": "MeitY CRS Compulsory Registration Mark",
+            "category": "regulatory_qco",
+            "text": "The equipment shall hold valid registration under the MeitY Compulsory Registration Scheme (CRS) and bear the official 'Self-Declaration — Conforming to IS 13252 (Part 1) : 2010' mark with unique R-number on both product and packaging.",
+            "normative_ref": "MeitY CRS Order",
+        },
+        {
+            "clause_id": "elec-c4",
+            "clause_number": "Clause 4.7",
+            "title": "Resistance to Fire and Flammability",
+            "category": "fire_safety",
+            "text": "Fire enclosures and plastic components shall satisfy flammability classes V-1 or better to mitigate ignition risk, harmonized with safety provisions of IS 616.",
+            "normative_ref": "IS 616 / IS 13252 Part 1",
+        },
+    ],
+    "clause": "All Information Technology hardware shall conform to IS 13252 (Part 1) : 2010 with Amendments 1 to 4 under the MeitY Compulsory Registration Scheme (CRS). All integrated secondary lithium cells and battery packs shall possess separate BIS registration under IS 16046 (Part 2) : 2018. The bidder shall provide valid BIS CRS registration numbers (R-numbers) on the equipment rating plate and GeM bid submission.",
+}
+
+STANDARDS_CATALOG: Dict[str, Dict[str, Any]] = {
+    "cables": CABLE,
+    "cement": CEMENT,
+    "steel": STEEL,
+    "electronics": ELECTRONICS,
+}
+
+# --- KNOWLEDGE GRAPHS PER DOMAIN ---
+GRAPHS: Dict[str, Dict[str, Any]] = {
+    "cables": {
+        "nodes": [
+            {"id": "primary", "label": "IS 7098 (Part 1):1988", "kind": "primary", "x": 50, "y": 46, "detail": "Primary product standard — XLPE insulated cables up to 1100 V."},
+            {"id": "conductor", "label": "IS 8130:2013", "kind": "normative_refs", "x": 18, "y": 20, "detail": "Conductor material, resistance and stranding requirements."},
+            {"id": "sheath", "label": "IS 5831:1984", "kind": "normative_refs", "x": 17, "y": 72, "detail": "PVC insulation and sheath compound requirements."},
+            {"id": "armour", "label": "IS 3975:1999", "kind": "normative_refs", "x": 80, "y": 19, "detail": "Mild steel wires, formed wires and tapes for armouring."},
+            {"id": "flame", "label": "IS 10810 Part 53", "kind": "test_methods", "x": 82, "y": 70, "detail": "Vertical flame propagation and flame retardance test method."},
+            {"id": "qco", "label": "Cables QCO 2023", "kind": "qco_mandates", "x": 50, "y": 88, "detail": "Statutory Quality Control Order — BIS Standard Mark mandatory."},
+            {"id": "old", "label": "IS 694:1990", "kind": "superseded_refs", "x": 8, "y": 47, "detail": "Withdrawn reference detected in tender draft; do not cite."},
+        ],
+        "edges": [
+            {"from": "primary", "to": "conductor", "label": "requires"},
+            {"from": "primary", "to": "sheath", "label": "requires"},
+            {"from": "primary", "to": "armour", "label": "requires"},
+            {"from": "primary", "to": "flame", "label": "tested by"},
+            {"from": "primary", "to": "qco", "label": "mandated by"},
+            {"from": "old", "to": "primary", "label": "superseded by"},
+        ],
+    },
+    "cement": {
+        "nodes": [
+            {"id": "primary", "label": "IS 12269:2013", "kind": "primary", "x": 50, "y": 46, "detail": "Primary product standard — Ordinary Portland Cement 53 Grade."},
+            {"id": "compressive", "label": "IS 4031 (Part 6)", "kind": "test_methods", "x": 20, "y": 25, "detail": "Compressive strength determination at 3, 7, and 28 days."},
+            {"id": "soundness", "label": "IS 4031 (Part 3)", "kind": "test_methods", "x": 20, "y": 70, "detail": "Soundness testing by Le Chatelier and autoclave methods."},
+            {"id": "chemical", "label": "IS 4032:1985", "kind": "test_methods", "x": 80, "y": 25, "detail": "Chemical analysis for insoluble residue, loss on ignition, and magnesia."},
+            {"id": "sampling", "label": "IS 4987:1993", "kind": "normative_refs", "x": 80, "y": 70, "detail": "Recommendations for sampling and batch acceptance."},
+            {"id": "qco", "label": "Cement QCO 2003", "kind": "qco_mandates", "x": 50, "y": 88, "detail": "Mandatory BIS certification under Cement (Quality Control) Order."},
+            {"id": "old", "label": "IS 269:1976", "kind": "superseded_refs", "x": 10, "y": 48, "detail": "Obsolete cement standard for structural high-strength applications."},
+        ],
+        "edges": [
+            {"from": "primary", "to": "compressive", "label": "tested by"},
+            {"from": "primary", "to": "soundness", "label": "tested by"},
+            {"from": "primary", "to": "chemical", "label": "analyzed by"},
+            {"from": "primary", "to": "sampling", "label": "sampled per"},
+            {"from": "primary", "to": "qco", "label": "mandated by"},
+            {"from": "old", "to": "primary", "label": "superseded by"},
+        ],
+    },
+    "steel": {
+        "nodes": [
+            {"id": "primary", "label": "IS 1786:2008", "kind": "primary", "x": 50, "y": 46, "detail": "High strength deformed steel bars for concrete reinforcement — Fe 500D."},
+            {"id": "tensile", "label": "IS 1608 (Part 1)", "kind": "test_methods", "x": 20, "y": 25, "detail": "Tensile testing: 0.2 percent proof stress, TS/YS ratio, Agt elongation."},
+            {"id": "bend", "label": "IS 1599:2019", "kind": "test_methods", "x": 20, "y": 70, "detail": "Bend and rebend testing around standard mandrels."},
+            {"id": "chemical", "label": "IS 228 Series", "kind": "test_methods", "x": 80, "y": 25, "detail": "Spectrometric chemical analysis for Carbon, Sulphur, and Phosphorus."},
+            {"id": "qco", "label": "Steel QCO 2024", "kind": "qco_mandates", "x": 50, "y": 88, "detail": "Steel and Steel Products (Quality Control) Order, 2024."},
+            {"id": "old", "label": "IS 432:1982", "kind": "superseded_refs", "x": 10, "y": 48, "detail": "Mild steel plain bars; obsolete for modern seismic RCC structures."},
+        ],
+        "edges": [
+            {"from": "primary", "to": "tensile", "label": "tested by"},
+            {"from": "primary", "to": "bend", "label": "tested by"},
+            {"from": "primary", "to": "chemical", "label": "analyzed by"},
+            {"from": "primary", "to": "qco", "label": "mandated by"},
+            {"from": "old", "to": "primary", "label": "superseded by"},
+        ],
+    },
+    "electronics": {
+        "nodes": [
+            {"id": "primary", "label": "IS 13252 (Part 1):2010", "kind": "primary", "x": 50, "y": 46, "detail": "Safety of Information Technology Equipment — General Requirements."},
+            {"id": "audiovideo", "label": "IS 616:2017", "kind": "normative_refs", "x": 20, "y": 25, "detail": "Harmonized safety requirements for AV and electronic apparatus."},
+            {"id": "lithium", "label": "IS 16046 (Part 2)", "kind": "normative_refs", "x": 80, "y": 25, "detail": "Mandatory safety standard for secondary lithium cells and packs."},
+            {"id": "qco", "label": "MeitY CRS Order", "kind": "qco_mandates", "x": 50, "y": 88, "detail": "Compulsory Registration Scheme for electronics and IT goods."},
+            {"id": "old", "label": "IS 13252:2003", "kind": "superseded_refs", "x": 10, "y": 48, "detail": "Superseded edition; lacking modern lithium cell safety provisions."},
+        ],
+        "edges": [
+            {"from": "primary", "to": "audiovideo", "label": "harmonized with"},
+            {"from": "primary", "to": "lithium", "label": "requires compliance"},
+            {"from": "primary", "to": "qco", "label": "registered under"},
+            {"from": "old", "to": "primary", "label": "superseded by"},
+        ],
+    },
+}
+
+# Compatibility alias for existing single graph usage
+GRAPH = GRAPHS["cables"]
+
+# --- AUDIT DEFAULTS & LOG DATA ---
 AUDIT = {
     "fileName": "Tender_GeM_Elect_2026.pdf",
     "items": [
-        {"line": "Line Item 1", "title": "PVC insulated power cable, 1.1 kV", "standard": "IS 694 : 1990", "status": "critical", "finding": "Cited standard is withdrawn and superseded. The clause also omits low-smoke and zero-halogen fire test mandates.", "recommendation": "Replace with IS 694 : 2010 + Amendments 1 to 4 and add IS 10810 flame-retardance evidence."},
-        {"line": "Line Item 2", "title": "High-strength deformed steel bar Fe 500D", "standard": "IS 1786 : 2008", "status": "compliant", "finding": "Reference is active for the cited product class. Mechanical and chemical conformity fields are present.", "recommendation": "Retain reference; request heat-wise test certificate and BIS licence number at supply stage."},
+        {
+            "line": "Line Item 1",
+            "title": "PVC insulated power cable, 1.1 kV",
+            "standard": "IS 694 : 1990",
+            "status": "critical",
+            "finding": "Cited standard is withdrawn and superseded. The clause also omits low-smoke and zero-halogen fire test mandates.",
+            "recommendation": "Replace with IS 694 : 2010 + Amendments 1 to 4 and add IS 10810 flame-retardance evidence.",
+        },
+        {
+            "line": "Line Item 2",
+            "title": "High-strength deformed steel bar Fe 500D",
+            "standard": "IS 1786 : 2008",
+            "status": "compliant",
+            "finding": "Reference is active for the cited product class. Mechanical and chemical conformity fields are present.",
+            "recommendation": "Retain reference; request heat-wise test certificate and BIS licence number at supply stage.",
+        },
     ],
-    "summary": {"critical": 1, "compliant": 1, "coverage": "82%"}
+    "summary": {"critical": 1, "compliant": 1, "coverage": "82%"},
 }
 
+SUPERSEDED_CATALOG = [
+    {
+        "pattern": "is 694 : 1990",
+        "domain": "cables",
+        "title": "PVC insulated power cable, 1.1 kV",
+        "bad_code": "IS 694 : 1990",
+        "good_code": "IS 694 : 2010 + Amendments 1 to 4",
+        "finding": "Cited standard IS 694:1990 is withdrawn and superseded. Missing flame retardance tests per IS 10810 (Part 53).",
+        "recommendation": "Replace with IS 694 : 2010 + Amendments 1 to 4 and mandate IS 10810 Part 53 flame test.",
+    },
+    {
+        "pattern": "is 269 : 1976",
+        "domain": "cement",
+        "title": "Structural High Strength Cement",
+        "bad_code": "IS 269 : 1976",
+        "good_code": "IS 12269 : 2013 (53 Grade OPC)",
+        "finding": "IS 269:1976 is obsolete for 53 Grade high-strength concrete. Missing mandatory IS 4031 (Part 6) compressive strength clause.",
+        "recommendation": "Specify IS 12269 : 2013 with batch-wise IS 4031 Part 6 test certification and Cement QCO 2003 compliance.",
+    },
+    {
+        "pattern": "is 432",
+        "domain": "steel",
+        "title": "Reinforcement Steel Bars",
+        "bad_code": "IS 432 : 1982",
+        "good_code": "IS 1786 : 2008 (Fe 500D)",
+        "finding": "IS 432 (Mild steel plain bars) lacks ductility and proof stress required for seismic-resistant RCC structures.",
+        "recommendation": "Replace with IS 1786 : 2008 Fe 500D with minimum 0.2% proof stress of 500 N/mm² under Steel QCO 2024.",
+    },
+    {
+        "pattern": "is 13252 : 2003",
+        "domain": "electronics",
+        "title": "IT Server and Workstation Hardware",
+        "bad_code": "IS 13252 : 2003",
+        "good_code": "IS 13252 (Part 1) : 2010",
+        "finding": "Withdrawn edition cited. Omits secondary lithium battery safety certification under IS 16046 (Part 2) and MeitY CRS registration.",
+        "recommendation": "Update to IS 13252 (Part 1) : 2010 and mandate MeitY CRS R-number with IS 16046 (Part 2) battery compliance.",
+    },
+]
+
+# Legacy search helper for backward compatibility
 def search(query: str):
-    normalized = query.lower()
-    cable_terms = ("cable", "xlpe", "तार", "केबल", "1.1kv", "7098")
-    is_cable = any(term in normalized for term in cable_terms)
-    result = deepcopy(CABLE if is_cable else CEMENT)
-    return {"primary": result, "matched_on": ["XLPE", "cable", "1.1 kV", "IS 7098"] if is_cable else ["cement", "53 grade", "IS 12269"]}
+    from retrieval_engine import get_retrieval_engine
+    engine = get_retrieval_engine()
+    return engine.search(query)
 
 
 def audit(corrected: bool = False):
     result = deepcopy(AUDIT)
     if corrected:
-        result["items"][0].update({"standard": "IS 694 : 2010 + Amd. 1 to 4", "status": "compliant", "finding": "Draft corrected: current reference inserted and fire test requirement restored.", "recommendation": "Review the generated clause, then issue the updated tender version."})
+        result["items"][0].update({
+            "standard": "IS 694 : 2010 + Amd. 1 to 4",
+            "status": "compliant",
+            "finding": "Draft corrected: current reference inserted and fire test requirement restored.",
+            "recommendation": "Review the generated clause, then issue the updated tender version.",
+        })
         result["summary"] = {"critical": 0, "compliant": 2, "coverage": "100%"}
     return result
