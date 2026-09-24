@@ -365,44 +365,143 @@ AUDIT = {
     "summary": {"critical": 1, "compliant": 1, "coverage": "82%"},
 }
 
+# Enhanced Regulatory Supersession Database
 SUPERSEDED_CATALOG = [
     {
         "pattern": "is 694 : 1990",
+        "alias_patterns": ["is 694:1990", "is 694", "is694"],
         "domain": "cables",
         "title": "PVC insulated power cable, 1.1 kV",
         "bad_code": "IS 694 : 1990",
-        "good_code": "IS 694 : 2010 + Amendments 1 to 4",
+        "cited_code": "IS 694 : 1990",
+        "status": "SUPERSEDED_WITHDRAWN",
+        "flag": "SUPERSEDED_WITHDRAWN",
+        "good_code": "IS 694 : 2010 (Fourth Revision) + Amendments 1 to 4",
+        "replacement": "IS 694 : 2010 (Fourth Revision) + Amendments 1 to 4",
+        "replacement_code": "IS 694 : 2010",
+        "risk_severity": "CRITICAL",
+        "missing_tests": [
+            "IS 10810 (Part 53) - Flame Retardance Test",
+            "IS 8130 : 2013 - Conductor Resistance",
+        ],
+        "rationale": "The 1990 edition lacks mandatory Low Smoke Zero Halogen (LSZH) test compliance under the Wires & Cables QCO.",
         "finding": "Cited standard IS 694:1990 is withdrawn and superseded. Missing flame retardance tests per IS 10810 (Part 53).",
         "recommendation": "Replace with IS 694 : 2010 + Amendments 1 to 4 and mandate IS 10810 Part 53 flame test.",
     },
     {
         "pattern": "is 269 : 1976",
+        "alias_patterns": ["is 269:1976", "is 269", "is269"],
         "domain": "cement",
         "title": "Structural High Strength Cement",
         "bad_code": "IS 269 : 1976",
+        "cited_code": "IS 269 : 1976",
+        "status": "SUPERSEDED_WITHDRAWN",
+        "flag": "SUPERSEDED_WITHDRAWN",
         "good_code": "IS 12269 : 2013 (53 Grade OPC)",
+        "replacement": "IS 12269 : 2013 (53 Grade OPC)",
+        "replacement_code": "IS 12269 : 2013",
+        "risk_severity": "CRITICAL",
+        "missing_tests": [
+            "IS 4031 (Part 6) - 28-day Compressive Strength Test",
+            "IS 4032 : 1985 - Chemical Composition Limits",
+        ],
+        "rationale": "IS 269:1976 is obsolete for 53 Grade high-strength concrete under Cement QCO 2003.",
         "finding": "IS 269:1976 is obsolete for 53 Grade high-strength concrete. Missing mandatory IS 4031 (Part 6) compressive strength clause.",
         "recommendation": "Specify IS 12269 : 2013 with batch-wise IS 4031 Part 6 test certification and Cement QCO 2003 compliance.",
     },
     {
         "pattern": "is 432",
+        "alias_patterns": ["is 432:1982", "is 432 : 1982", "is432"],
         "domain": "steel",
         "title": "Reinforcement Steel Bars",
         "bad_code": "IS 432 : 1982",
+        "cited_code": "IS 432 : 1982",
+        "status": "SUPERSEDED_WITHDRAWN",
+        "flag": "SUPERSEDED_WITHDRAWN",
         "good_code": "IS 1786 : 2008 (Fe 500D)",
+        "replacement": "IS 1786 : 2008 (Fe 500D)",
+        "replacement_code": "IS 1786 : 2008",
+        "risk_severity": "CRITICAL",
+        "missing_tests": [
+            "IS 1608 (Part 1) - 0.2% Proof Stress",
+            "IS 1599 : 2019 - Bend and Rebend Test",
+        ],
+        "rationale": "IS 432 mild steel plain bars lack high ductility and seismic proof stress mandates under Steel QCO 2024.",
         "finding": "IS 432 (Mild steel plain bars) lacks ductility and proof stress required for seismic-resistant RCC structures.",
         "recommendation": "Replace with IS 1786 : 2008 Fe 500D with minimum 0.2% proof stress of 500 N/mm² under Steel QCO 2024.",
     },
     {
         "pattern": "is 13252 : 2003",
+        "alias_patterns": ["is 13252:2003", "is 13252", "is13252"],
         "domain": "electronics",
         "title": "IT Server and Workstation Hardware",
         "bad_code": "IS 13252 : 2003",
+        "cited_code": "IS 13252 : 2003",
+        "status": "SUPERSEDED_WITHDRAWN",
+        "flag": "SUPERSEDED_WITHDRAWN",
         "good_code": "IS 13252 (Part 1) : 2010",
+        "replacement": "IS 13252 (Part 1) : 2010",
+        "replacement_code": "IS 13252 (Part 1) : 2010",
+        "risk_severity": "CRITICAL",
+        "missing_tests": [
+            "IS 16046 (Part 2) : 2018 - Secondary Lithium Cells Safety",
+        ],
+        "rationale": "Withdrawn edition lacks mandatory secondary lithium battery safety and MeitY CRS registration.",
         "finding": "Withdrawn edition cited. Omits secondary lithium battery safety certification under IS 16046 (Part 2) and MeitY CRS registration.",
         "recommendation": "Update to IS 13252 (Part 1) : 2010 and mandate MeitY CRS R-number with IS 16046 (Part 2) battery compliance.",
     },
 ]
+
+# Bilingual Synthesized Specification Clauses
+BILINGUAL_CLAUSES = {
+    "is-7098-p1-1988": {
+        "code": "IS 7098 (Part 1) : 1988",
+        "en": "The supplied material shall strictly conform to IS 7098 (Part 1) : 1988 including all current amendments. Conductor materials and testing protocols must comply with IS 8130 : 2013 and IS 10810 (Series). Product must bear mandatory ISI Certification mark in compliance with Wires and Cables (Quality Control) Order, 2023.",
+        "hi": "आपूर्त सामग्री को नवीनतम संशोधनों सहित IS 7098 (Part 1) : 1988 के पूर्णतः अनुरूप होना अनिवार्य है। चालक सामग्री IS 8130 : 2013 तथा परीक्षण विधियाँ IS 10810 शृंखला के अनुरूप होंगी। उत्पाद पर तार एवं केबल (गुणवत्ता नियंत्रण) आदेश, 2023 के अंतर्गत अनिवार्य ISI प्रमाणन चिह्न (योजना-I) होना अनिवार्य है।",
+    },
+    "is-12269-2013": {
+        "code": "IS 12269 : 2013",
+        "en": "The supplied material shall strictly conform to IS 12269 : 2013 including all current amendments. Physical tests and 28-day compressive strength (minimum 53 MPa) must comply with IS 4031 (Series) and chemical analysis with IS 4032. Product must bear mandatory ISI Certification mark in compliance with Cement (Quality Control) Order, 2003.",
+        "hi": "आपूर्त सामग्री को नवीनतम संशोधनों सहित IS 12269 : 2013 के पूर्णतः अनुरूप होना अनिवार्य है। भौतिक परीक्षण एवं 28-दिवसीय संपीड़न सामर्थ्य (न्यूनतम 53 MPa) IS 4031 शृंखला तथा रासायनिक विश्लेषण IS 4032 के अनुरूप होना चाहिए। उत्पाद पर सीमेंट (गुणवत्ता नियंत्रण) आदेश, 2003 के अंतर्गत अनिवार्य ISI प्रमाणन चिह्न होना अनिवार्य है।",
+    },
+    "is-1786-2008": {
+        "code": "IS 1786 : 2008",
+        "en": "The supplied material shall strictly conform to IS 1786 : 2008 (Grade Fe 500D) including all current amendments. Mechanical properties, 0.2 percent proof stress, and bend tests must comply with IS 1608 (Part 1) and IS 1599. Product must bear mandatory ISI Certification mark in compliance with Steel and Steel Products (Quality Control) Order, 2024.",
+        "hi": "आपूर्त सामग्री को नवीनतम संशोधनों सहित IS 1786 : 2008 (ग्रेड Fe 500D) के पूर्णतः अनुरूप होना अनिवार्य है। यांत्रिक गुण, 0.2 प्रतिशत प्रूफ स्ट्रेस तथा बेंड परीक्षण IS 1608 (भाग 1) एवं IS 1599 के अनुरूप होंगे। उत्पाद पर इस्पात एवं इस्पात उत्पाद (गुणवत्ता नियंत्रण) आदेश, 2024 के अंतर्गत अनिवार्य ISI प्रमाणन चिह्न होना अनिवार्य है।",
+    },
+    "is-13252-p1-2010": {
+        "code": "IS 13252 (Part 1) : 2010",
+        "en": "The supplied material shall strictly conform to IS 13252 (Part 1) : 2010 including all current amendments. Secondary lithium cell and battery assemblies must comply with IS 16046 (Part 2) : 2018. Product must bear mandatory MeitY CRS Registration Mark under Electronics and IT Goods (Requirement for Compulsory Registration) Order.",
+        "hi": "आपूर्त सामग्री को नवीनतम संशोधनों सहित IS 13252 (Part 1) : 2010 के पूर्णतः अनुरूप होना अनिवार्य है। द्वितीयक लिथियम सेल एवं बैटरी संयोजन IS 16046 (भाग 2) : 2018 के अनुरूप होने चाहिए। उत्पाद पर इलेक्ट्रॉनिक्स और आईटी सामान (अनिवार्य पंजीकरण आवश्यकता) आदेश के अंतर्गत अनिवार्य MeitY CRS पंजीकरण चिह्न होना अनिवार्य है।",
+    },
+}
+
+def get_bilingual_clause(standard_key_or_code: str, language: str = "en") -> str:
+    """Return synthesized clause in requested language (en or hi)."""
+    lang = "hi" if (language or "").strip().lower() in ["hi", "hindi"] else "en"
+    key = standard_key_or_code.strip().lower().replace(" ", "-").replace(":", "-").replace("(", "").replace(")", "")
+    
+    # Direct match on key or standard code
+    for k, v in BILINGUAL_CLAUSES.items():
+        if k in key or v["code"].lower() in standard_key_or_code.lower() or key in v["code"].lower():
+            return v[lang]
+        
+    # Match standard numbers
+    if "7098" in standard_key_or_code:
+        return BILINGUAL_CLAUSES["is-7098-p1-1988"][lang]
+    elif "12269" in standard_key_or_code:
+        return BILINGUAL_CLAUSES["is-12269-2013"][lang]
+    elif "1786" in standard_key_or_code:
+        return BILINGUAL_CLAUSES["is-1786-2008"][lang]
+    elif "13252" in standard_key_or_code:
+        return BILINGUAL_CLAUSES["is-13252-p1-2010"][lang]
+    
+    # Dynamic fallback synthesis
+    clean_code = standard_key_or_code.strip()
+    if lang == "hi":
+        return f"आपूर्त सामग्री को नवीनतम संशोधनों सहित {clean_code} के पूर्णतः अनुरूप होना अनिवार्य है। सभी आवश्यक परीक्षण मानकों एवं लागू गुणवत्ता नियंत्रण आदेशों के अंतर्गत वैध BIS प्रमाणन चिह्न होना अनिवार्य है।"
+    return f"The supplied material shall strictly conform to {clean_code} including all current amendments and applicable Quality Control Orders (QCOs) with mandatory BIS Certification marking."
+
 
 # Legacy search helper for backward compatibility
 def search(query: str):
@@ -422,3 +521,4 @@ def audit(corrected: bool = False):
         })
         result["summary"] = {"critical": 0, "compliant": 2, "coverage": "100%"}
     return result
+

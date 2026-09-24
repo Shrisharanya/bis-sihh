@@ -260,9 +260,20 @@ export async function apiGetAuditHistory(): Promise<any[] | null> {
     const res = await apiFetch("/officer/audit-history");
     if (!res.ok) throw new Error("Audit history API error");
     const data = await res.json();
-    return data.history ?? [];
+    return Array.isArray(data) ? data : (data.history ?? []);
   } catch {
     return null;
+  }
+}
+
+export async function apiResolveAudit(auditId: string): Promise<boolean> {
+  try {
+    const res = await apiFetch(`/officer/audit-history/${auditId}/resolve`, {
+      method: "PATCH",
+    });
+    return res.ok;
+  } catch {
+    return false;
   }
 }
 
@@ -272,14 +283,43 @@ export async function apiExportClause(payload: {
   clause_body: string;
   domain?: string;
   format?: string;
+  language?: Language;
 }): Promise<any> {
   try {
-    const res = await apiFetch("/export/clause", {
+    const res = await apiFetch("/export-clause", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        standard_id: payload.standard_code,
+        standard_code: payload.standard_code,
+        clause_heading: payload.clause_heading,
+        clause_body: payload.clause_body,
+        domain: payload.domain,
+        format: payload.format || "docx",
+        language: payload.language || "en",
+      }),
+    });
+    if (res.ok) return await res.json();
+  } catch {
+    // handled gracefully
+  }
+  return null;
+}
+
+export async function apiExportDocx(payload: {
+  title: string;
+  clause_text: string;
+  primary_standard: string;
+  allied_standards?: any[];
+  language?: Language;
+}): Promise<Blob | null> {
+  try {
+    const res = await apiFetch("/export-docx", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
-    if (res.ok) return await res.json();
+    if (res.ok) return await res.blob();
   } catch {
     // handled gracefully
   }
