@@ -10,7 +10,7 @@ button { cursor: pointer; }
 button:disabled { cursor: not-allowed; opacity: .65; }
 button:focus-visible, input:focus-visible { outline: 2px solid var(--blue-soft); outline-offset: 2px; }
 .mono { font-family: var(--mono); }
-.app-shell { min-height: 100vh; background-image: linear-gradient(rgba(255,255,255,.012) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.012) 1px, transparent 1px); background-size: 48px 48px; }
+.app-shell { min-height: 100vh; position: relative; isolation: isolate; background: radial-gradient(ellipse 80% 55% at 50% -10%, rgba(42, 83, 150, .20), transparent 68%), linear-gradient(180deg, #0b1220 0%, #0a0f1a 48%, #080c14 100%); background-image: radial-gradient(ellipse 80% 55% at 50% -10%, rgba(42, 83, 150, .20), transparent 68%), linear-gradient(180deg, #0b1220 0%, #0a0f1a 48%, #080c14 100%); }
 .top-nav { height: 72px; display: flex; align-items: center; gap: 24px; padding: 0 30px; border-bottom: 1px solid var(--line-soft); background: rgba(10, 15, 29, .88); backdrop-filter: blur(14px); position: sticky; top: 0; z-index: 20; }
 .brand-block { display: flex; align-items: center; gap: 11px; min-width: 280px; }
 .brand-mark { width: 35px; height: 35px; border: 1px solid #3278e8; background: linear-gradient(135deg, #1d55a6, #0f2c62); border-radius: 8px; display: grid; place-items: center; color: #dceaff; position: relative; box-shadow: 0 0 24px rgba(47,123,246,.18); }
@@ -41,7 +41,7 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--blue-soft);
 .utility-divider { height: 12px; width: 1px; background: #2b394f; }
 .utility-spacer { flex: 1; }
 .search-console { padding: 36px 0 26px; position: relative; }
-.panel-grid-lines::before { content: ''; position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(90deg, rgba(52,79,117,.055) 1px, transparent 1px); background-size: 120px 100%; mask-image: linear-gradient(90deg, transparent, black 12%, black 86%, transparent); }
+.panel-grid-lines::before { display: none; }
 .section-kicker { position: relative; z-index: 1; display: flex; align-items: center; gap: 8px; color: #7194cf; font: 10px var(--mono); letter-spacing: .12em; text-transform: uppercase; }
 .kicker-dot { width: 7px; height: 7px; border-radius: 2px; background: var(--blue); box-shadow: 0 0 10px rgba(47,123,246,.6); }
 .amber-dot { background: var(--amber); box-shadow: 0 0 10px rgba(225,166,59,.6); }
@@ -138,9 +138,9 @@ h1, h2, h3, p { margin: 0; }
 .dark { --bg: #0f141c; --panel: #18202c; --panel-2: #202a38; --line: #283548; --line-soft: #202b3b; --muted: #94a3b8; --faint: #64748b; --blue: #1e40af; --blue-soft: #1d4ed8; --green: #15803d; --amber: #b45309; --red: #991b1b; --purple: #6d28d9; color: #f1f5f9; }
 html, body { background: var(--bg); color: var(--text-primary, #0f172a); transition: background-color .22s ease, color .22s ease; }
 .dark body { color: #f1f5f9; }
-body { background-image: radial-gradient(#cbd5e1 .75px, transparent .75px); background-size: 24px 24px; }
-.dark body { background-image: radial-gradient(#334155 .75px, transparent .75px); background-size: 24px 24px; }
-.app-shell { background: transparent; }
+body { background-image: linear-gradient(180deg, rgba(17, 24, 39, .28), rgba(8, 12, 20, .92)); }
+.dark body { background-image: linear-gradient(180deg, rgba(17, 24, 39, .28), rgba(8, 12, 20, .92)); }
+.app-shell { background: radial-gradient(ellipse 80% 55% at 50% -10%, rgba(42, 83, 150, .20), transparent 68%), linear-gradient(180deg, #0b1220 0%, #0a0f1a 48%, #080c14 100%); }
 .top-nav { height: 68px; padding: 0 28px; background: color-mix(in srgb, var(--bg) 94%, transparent); border-color: var(--line); }
 .brand-mark { border-color: #64748b; background: var(--panel-2); color: var(--blue-soft); box-shadow: none; border-radius: 6px; }.brand-mark span { display: none; }.brand-name { color: var(--text-primary, #0f172a); }.dark .brand-name { color: #f1f5f9; }.brand-pill { display: none; }.brand-subtitle { font-family: inherit; color: var(--muted); font-size: 10px; }
 .primary-tabs { justify-content: center; gap: 6px; }.nav-tab { font-family: inherit; font-size: 11px; color: var(--muted); padding: 0 12px; }.nav-tab.active { color: var(--blue); border-bottom-color: var(--blue); background: transparent; }.dark .nav-tab.active { color: #cbd5e1; border-bottom-color: #64748b; }
@@ -156,7 +156,7 @@ body { background-image: radial-gradient(#cbd5e1 .75px, transparent .75px); back
 
 /* v4 institutional polish: smooth surfaces, readable chrome, no dot/grid noise */
 body { background: radial-gradient(circle at 50% -12%, #111827 0%, #0B0F19 58%, #080b12 100%); background-image: radial-gradient(circle at 50% -12%, #111827 0%, #0B0F19 58%, #080b12 100%); }
-.app-shell { background-image: none; }
+.app-shell { background-image: radial-gradient(ellipse 80% 55% at 50% -10%, rgba(42, 83, 150, .20), transparent 68%), linear-gradient(180deg, #0b1220 0%, #0a0f1a 48%, #080c14 100%); }
 .panel-grid-lines::before { display: none; }
 .top-nav { min-height: 76px; height: auto; background: rgba(11,15,25,.94); }
 .nav-tab { font-size: 15px; font-weight: 600; color: #cbd5e1; padding: 0 16px; }
@@ -181,3 +181,26 @@ body { background: radial-gradient(circle at 50% -12%, #111827 0%, #0B0F19 58%, 
 .workspace-empty { display: flex; align-items: center; gap: 7px; padding: 12px; color: var(--muted); font-size: 11px; border-top: 1px solid var(--line-soft); }.history-icon { color: var(--blue); }.official-export-button { color: var(--blue); border-color: color-mix(in srgb, var(--blue) 40%, var(--line)); }
 @media (max-width: 900px) { .nav-tab { font-size: 14px; padding: 0 10px; } .sync-pill { display: none; } }
 @media (max-width: 620px) { .nav-tab { font-size: 13px; } .language-toggle button { font-size: 12px; padding: 7px 8px; } .deep-dossier-grid { grid-template-columns: 1fr; } }
+
+/* v5 polish: barely-there pointer and chrome light, never a distracting neon effect */
+:root { --cursor-x: 50vw; --cursor-y: 28vh; }
+.app-shell::after { content: ""; position: fixed; z-index: -1; pointer-events: none; width: 420px; height: 420px; left: calc(var(--cursor-x) - 210px); top: calc(var(--cursor-y) - 210px); border-radius: 50%; background: radial-gradient(circle, rgba(88, 145, 235, .055) 0%, rgba(88, 145, 235, .018) 34%, transparent 70%); filter: blur(10px); opacity: .8; transition: left .24s ease-out, top .24s ease-out; }
+.top-nav { box-shadow: 0 7px 28px rgba(31, 76, 140, .075), inset 0 -1px 0 rgba(122, 166, 235, .055); }
+.top-nav::after { content: ""; position: absolute; left: 8%; right: 8%; bottom: -1px; height: 1px; pointer-events: none; background: linear-gradient(90deg, transparent, rgba(91, 145, 228, .24), transparent); opacity: .55; }
+.command-shell, .filter-toolbar { box-shadow: 0 0 0 1px rgba(96, 147, 226, .035), 0 9px 25px rgba(16, 43, 82, .11); }
+.dark .command-shell, .dark .filter-toolbar { box-shadow: 0 0 0 1px rgba(126, 169, 240, .055), 0 10px 28px rgba(0, 0, 0, .16); }
+.dark .top-nav { background: rgba(10, 15, 29, .86); box-shadow: 0 8px 30px rgba(9, 25, 55, .12), inset 0 -1px 0 rgba(118, 161, 230, .06); }
+@media (prefers-reduced-motion: reduce) { .app-shell::after { transition: none; } }
+
+/* Dark-mode final contrast pass */
+html.dark body { background: radial-gradient(ellipse 82% 58% at 50% -12%, rgba(42, 83, 150, .22), transparent 68%), linear-gradient(180deg, #0b1220 0%, #0a0f1a 48%, #080c14 100%); }
+html.dark .app-shell { background: radial-gradient(ellipse 82% 58% at 50% -12%, rgba(42, 83, 150, .22), transparent 68%), linear-gradient(180deg, #0b1220 0%, #0a0f1a 48%, #080c14 100%); }
+html.dark .top-nav { background: rgba(10, 15, 29, .90); border-color: #243248; }
+html.dark .nav-tab { color: #a9b8cf; }
+html.dark .nav-tab:hover { color: #e5eefc; background: rgba(96, 147, 226, .08); }
+html.dark .nav-tab.active { color: #f4f8ff; border-bottom-color: #6f9ff0; }
+html.dark .sync-pill, html.dark .api-pill, html.dark .theme-button, html.dark .language-toggle, html.dark .avatar-button { background: #18202c; border-color: #33445f; color: #c7d7ee; box-shadow: 0 0 14px rgba(74, 126, 210, .08); }
+html.dark .language-toggle button { color: #a9b8cf; }
+html.dark .language-toggle button.selected { color: #f4f8ff; background: #243858; }
+html.dark .app-shell::after { z-index: 0; }
+html.dark .app-shell > * { position: relative; z-index: 1; }
