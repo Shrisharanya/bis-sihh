@@ -44,6 +44,38 @@ async function startServer() {
       createContext,
     })
   );
+
+  // Proxy non-trpc /api requests to FastAPI backend (http://127.0.0.1:8000)
+  app.use("/api", async (req, res, next) => {
+    const backendUrl = `http://127.0.0.1:8000/api${req.url}`;
+    try {
+      const headers = { ...req.headers } as Record<string, string>;
+      delete headers.host;
+      delete headers["content-length"];
+
+      const fetchOptions: RequestInit = {
+        method: req.method,
+        headers,
+      };
+
+      if (req.method !== "GET" && req.method !== "HEAD" && req.body && Object.keys(req.body).length > 0) {
+        fetchOptions.body = JSON.stringify(req.body);
+        headers["content-type"] = "application/json";
+      }
+
+      const response = await fetch(backendUrl, fetchOptions);
+      res.status(response.status);
+      response.headers.forEach((value, name) => {
+        if (name.toLowerCase() !== "content-encoding") {
+          res.setHeader(name, value);
+        }
+      });
+      const data = await response.arrayBuffer();
+      res.send(Buffer.from(data));
+    } catch {
+      next();
+    }
+  });
   // development mode uses Vite, production mode uses static files
   if (process.env.NODE_ENV === "development") {
     await setupVite(app, server);
