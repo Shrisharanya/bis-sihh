@@ -477,3 +477,12 @@ export function defaultLanguage(): Language { return "en"; }
 export function defaultView(): ActiveView { return "search"; }
 
 export function auditSummaryLine(response: AuditResponse) { return `${response.summary.critical} critical · ${response.summary.compliant} compliant · ${response.summary.coverage} coverage`; }
+
+export async function apiResolveAudit(auditId: string): Promise<boolean> {
+  try {
+    const response = await apiFetch(`/officer/audit-history/${encodeURIComponent(auditId)}/resolve`, { method: "PATCH" });
+    return response.ok;
+  } catch {
+    return false;
+  }
+}
