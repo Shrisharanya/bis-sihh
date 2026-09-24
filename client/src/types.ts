@@ -42,6 +42,17 @@ export interface AuditResponse { fileName: string; items: AuditItem[]; summary: 
 export interface ClauseDraft { heading: string; body: string; source: string; }
 export interface SearchResponse { primary: StandardResult; matchedOn: string[]; }
 export interface ApiState { connected: boolean; lastSync: string; }
+export interface AuditRecord { id: string; fileName: string; fileSize: string; timestamp: string; defectsFound: number; supersededStandard: string; replacementStandard: string; status: "FLAGGED" | "RESOLVED"; defectSummary: string; }
+
+export function loadAuditRecords(): AuditRecord[] {
+  if (typeof window === "undefined") return [];
+  try { return JSON.parse(localStorage.getItem("manaksetu.auditHistory") ?? "[]") as AuditRecord[]; } catch { return []; }
+}
+export function saveAuditRecords(records: AuditRecord[]) { if (typeof window !== "undefined") localStorage.setItem("manaksetu.auditHistory", JSON.stringify(records)); }
+export function buildAuditRecord(response: AuditResponse, fileName: string, fileSize: string): AuditRecord {
+  const critical = response.items.find((item) => item.status === "critical");
+  return { id: `AUD-${Date.now().toString().slice(-6)}`, fileName, fileSize, timestamp: new Date().toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" }), defectsFound: response.summary.critical, supersededStandard: critical?.standard ?? "—", replacementStandard: critical?.recommendation.match(/IS \d+[^+.]*/)?.[0]?.trim() ?? "—", status: response.summary.critical ? "FLAGGED" : "RESOLVED", defectSummary: `${response.summary.critical} Withdrawn Standard, ${response.summary.critical ? 2 : 0} Missing Normative References` };
+}
 
 export const fallbackCable: StandardResult = {
   id: "is-7098-p1-1988", code: "IS 7098 (Part 1) : 1988", title: "Crosslinked Polyethylene Insulated Thermoplastic Sheathed Cables", status: "CURRENT & ACTIVE", year: "1988", ics: "29.060.20",

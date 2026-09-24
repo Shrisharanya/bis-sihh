@@ -1,95 +1,29 @@
-import type { Language } from "../types";
+import type { GraphNode, Language, StandardResult } from "../types";
 
 export const translations = {
   en: {
-    brandTitle: "ManakSetu",
-    brandSubtitle: "BIS Procurement Standards Copilot",
-    gazette: "BIS Gazette: Active (Sept 2026)",
-    search: "Standards Search & Dossier",
-    audit: "Tender Document Auditor",
-    graph: "Normative Knowledge Graph",
-    workspace: "Officer Workspace",
-    officer: "Shri Rajesh Kumar Sharma",
-    officerRole: "Chief Procurement Officer",
-    department: "Department of Public Works / GeM Desk",
-    searchPrompt: "Search a product, requirement or BIS code…",
-    searchTitle: "Find the standard",
-    searchTitleAccent: "before you write the clause.",
-    searchScope: "English + Hindi · BIS standards · allied test methods · QCOs",
-    clauseFilters: "Clause-level filters",
-    allDomains: "All domains",
-    allClauseTypes: "All clause types",
-    qco: "Mandatory QCO only",
-    isi: "ISI Mark / Scheme I",
-    crs: "CRS Electronics",
-    dossier: "Primary standard",
-    allied: "Allied normative standards",
-    clause: "Formatted tender clause",
-    auditTitle: "Tender document auditor",
-    auditSub: "Document-level checks for superseded standards, QCOs and missing test mandates",
-    ingestion: "Tender ingestion summary",
-    clausesParsed: "clauses parsed",
-    withdrawn: "Withdrawn standard found",
-    missingRefs: "Missing normative references",
-    rawClause: "Raw clause text",
-    replacement: "Supersession resolution",
-    applyReplacement: "Apply replacement to draft",
-    workspaceTitle: "My procurement workspace",
-    savedDrafts: "Saved specification drafts",
-    auditHistory: "Tender audit history",
-    loadSynthesizer: "Load in synthesizer",
-    saveWorkspace: "Save to my workspace",
-    activeCredential: "DSC Token: Active & Validated (NIC-CA)",
-    light: "Light mode",
-    dark: "Dark mode",
-    openProfile: "Open officer profile",
-    close: "Close",
+    brandTitle: "ManakSetu", brandSubtitle: "BIS Procurement Standards Copilot", gazette: "BIS Gazette: Active (Sept 2026)", search: "Standards Search & Dossier", audit: "Tender Document Auditor", graph: "Normative Knowledge Graph", workspace: "Officer Workspace", officer: "Shri Rajesh Kumar Sharma", officerRole: "Chief Procurement Officer", department: "Department of Public Works / GeM Desk", searchPrompt: "Search a product, requirement or BIS code…", searchTitle: "Find the standard", searchTitleAccent: "before you write the clause.", searchScope: "English + Hindi · BIS standards · allied test methods · QCOs", clauseFilters: "Clause-level filters", allDomains: "All domains", allClauseTypes: "All clause types", qco: "Mandatory QCO only", isi: "ISI Mark / Scheme I", crs: "CRS Electronics", dossier: "Primary standard", allied: "Allied normative standards", clause: "Formatted tender clause", auditTitle: "Tender document auditor", auditSub: "Document-level checks for superseded standards, QCOs and missing test mandates", ingestion: "Tender ingestion summary", clausesParsed: "clauses parsed", withdrawn: "Withdrawn standard found", missingRefs: "Missing normative references", rawClause: "Raw clause text", replacement: "Supersession resolution", applyReplacement: "Apply replacement to draft", workspaceTitle: "My procurement workspace", savedDrafts: "Saved specification drafts", auditHistory: "Tender audit history", loadSynthesizer: "Load in synthesizer", saveWorkspace: "Save to my workspace", activeCredential: "DSC Token: Active & Validated (NIC-CA)", light: "Light mode", dark: "Dark mode", openProfile: "Open officer profile", close: "Close", primaryStandard: "Primary Standard", testMethod: "Test Method", normativeSpec: "Normative Specification", mandatedQco: "Mandated QCO", technicalCommittee: "Technical committee", reaffirmationYear: "Reaffirmation year", amendmentNumber: "Amendment number", scopeApplication: "Scope & application", graphInspector: "Node inspector", directRelationships: "Direct relationships", exactClause: "Exact clause context", sourceLocked: "Source-locked", officialExport: "Export official DOCX", exportReady: "Official tender document prepared", procuringEntity: "Procuring Entity", officerName: "Officer Name", dscHash: "DSC Verification Hash", manufacturerCriteria: "Manufacturer compliance criteria", normativeReferences: "Mandatory normative references", flagged: "FLAGGED", resolved: "RESOLVED", auditRecord: "Audit record", noAuditRecords: "No additional tender scans yet.", uploaded: "Uploaded tender scan", defects: "defects", current: "Current", historical: "Historical" 
   },
   hi: {
-    brandTitle: "मानकसेतु",
-    brandSubtitle: "BIS खरीद मानक सहायक",
-    gazette: "BIS राजपत्र: सक्रिय (सितंबर 2026)",
-    search: "मानक खोज और डॉसियर",
-    audit: "निविदा दस्तावेज़ ऑडिटर",
-    graph: "मानक ज्ञान ग्राफ",
-    workspace: "अधिकारी कार्यक्षेत्र",
-    officer: "श्री राजेश कुमार शर्मा",
-    officerRole: "मुख्य खरीद अधिकारी",
-    department: "लोक निर्माण विभाग / GeM डेस्क",
-    searchPrompt: "उत्पाद, आवश्यकता या BIS कोड खोजें…",
-    searchTitle: "मानक खोजें",
-    searchTitleAccent: "खंड लिखने से पहले।",
-    searchScope: "हिन्दी + English · BIS मानक · संबद्ध परीक्षण विधियाँ · QCO",
-    clauseFilters: "खंड-स्तरीय फ़िल्टर",
-    allDomains: "सभी क्षेत्र",
-    allClauseTypes: "सभी खंड प्रकार",
-    qco: "केवल अनिवार्य QCO",
-    isi: "ISI चिह्न / योजना I",
-    crs: "CRS इलेक्ट्रॉनिक्स",
-    dossier: "प्राथमिक मानक",
-    allied: "संबद्ध मानक",
-    clause: "प्रारूपित निविदा खंड",
-    auditTitle: "निविदा दस्तावेज़ ऑडिटर",
-    auditSub: "प्रतिस्थापित मानकों, QCO और अनुपस्थित परीक्षण निर्देशों की जाँच",
-    ingestion: "निविदा इनजेशन सारांश",
-    clausesParsed: "खंड पार्स किए गए",
-    withdrawn: "वापस लिया गया मानक मिला",
-    missingRefs: "अनुपस्थित संबद्ध संदर्भ",
-    rawClause: "मूल खंड पाठ",
-    replacement: "प्रतिस्थापन समाधान",
-    applyReplacement: "प्रारूप में प्रतिस्थापन लागू करें",
-    workspaceTitle: "मेरा खरीद कार्यक्षेत्र",
-    savedDrafts: "सहेजे गए विनिर्देश प्रारूप",
-    auditHistory: "निविदा ऑडिट इतिहास",
-    loadSynthesizer: "सिंथेसाइज़र में लोड करें",
-    saveWorkspace: "मेरे कार्यक्षेत्र में सहेजें",
-    activeCredential: "DSC टोकन: सक्रिय और सत्यापित (NIC-CA)",
-    light: "लाइट मोड",
-    dark: "डार्क मोड",
-    openProfile: "अधिकारी प्रोफ़ाइल खोलें",
-    close: "बंद करें",
+    brandTitle: "मानकसेतु", brandSubtitle: "BIS खरीद मानक सहायक", gazette: "BIS राजपत्र: सक्रिय (सितंबर 2026)", search: "मानक खोज और डॉसियर", audit: "निविदा दस्तावेज़ ऑडिटर", graph: "मानक ज्ञान ग्राफ", workspace: "अधिकारी कार्यक्षेत्र", officer: "श्री राजेश कुमार शर्मा", officerRole: "मुख्य खरीद अधिकारी", department: "लोक निर्माण विभाग / GeM डेस्क", searchPrompt: "उत्पाद, आवश्यकता या BIS कोड खोजें…", searchTitle: "मानक खोजें", searchTitleAccent: "खंड लिखने से पहले।", searchScope: "हिन्दी + English · BIS मानक · संबद्ध परीक्षण विधियाँ · QCO", clauseFilters: "खंड-स्तरीय फ़िल्टर", allDomains: "सभी क्षेत्र", allClauseTypes: "सभी खंड प्रकार", qco: "केवल अनिवार्य QCO", isi: "ISI चिह्न / योजना I", crs: "CRS इलेक्ट्रॉनिक्स", dossier: "प्राथमिक मानक", allied: "संबद्ध मानक", clause: "प्रारूपित निविदा खंड", auditTitle: "निविदा दस्तावेज़ ऑडिटर", auditSub: "प्रतिस्थापित मानकों, QCO और अनुपस्थित परीक्षण निर्देशों की जाँच", ingestion: "निविदा इनजेशन सारांश", clausesParsed: "खंड पार्स किए गए", withdrawn: "वापस लिया गया मानक मिला", missingRefs: "अनुपस्थित संबद्ध संदर्भ", rawClause: "मूल खंड पाठ", replacement: "प्रतिस्थापन समाधान", applyReplacement: "प्रारूप में प्रतिस्थापन लागू करें", workspaceTitle: "मेरा खरीद कार्यक्षेत्र", savedDrafts: "सहेजे गए विनिर्देश प्रारूप", auditHistory: "निविदा ऑडिट इतिहास", loadSynthesizer: "सिंथेसाइज़र में लोड करें", saveWorkspace: "मेरे कार्यक्षेत्र में सहेजें", activeCredential: "DSC टोकन: सक्रिय और सत्यापित (NIC-CA)", light: "लाइट मोड", dark: "डार्क मोड", openProfile: "अधिकारी प्रोफ़ाइल खोलें", close: "बंद करें", primaryStandard: "प्राथमिक मानक", testMethod: "मानक परीक्षण विधि", normativeSpec: "अनिवार्य विनिर्देश", mandatedQco: "लागू गुणवत्ता आदेश", technicalCommittee: "तकनीकी समिति", reaffirmationYear: "पुनरीक्षण वर्ष", amendmentNumber: "संशोधन संख्या", scopeApplication: "दायरा एवं अनुप्रयोग", graphInspector: "नोड निरीक्षक", directRelationships: "प्रत्यक्ष संबंध", exactClause: "सटीक खंड संदर्भ", sourceLocked: "स्रोत-सत्यापित", officialExport: "आधिकारिक DOCX निर्यात", exportReady: "आधिकारिक निविदा दस्तावेज़ तैयार है", procuringEntity: "क्रय इकाई", officerName: "अधिकारी का नाम", dscHash: "DSC सत्यापन हैश", manufacturerCriteria: "निर्माता अनुपालन मानदंड", normativeReferences: "अनिवार्य संबद्ध संदर्भ", flagged: "चिह्नित", resolved: "समाधानित", auditRecord: "ऑडिट रिकॉर्ड", noAuditRecords: "अभी कोई अतिरिक्त निविदा स्कैन नहीं है।", uploaded: "अपलोड की गई निविदा स्कैन", defects: "दोष", current: "वर्तमान", historical: "ऐतिहासिक"
   },
 } as const;
-
 export type TranslationKey = keyof typeof translations.en;
 export const tx = (language: Language, key: TranslationKey) => translations[language][key];
+
+const dossierHi: Record<string, Partial<Record<"title" | "scope" | "clause" | "committee" | "reaffirmation" | "amendments", string>>> = {
+  "is-7098-p1-1988": { title: "क्रॉस-लिंक्ड पॉलीएथिलीन इंसुलेटेड थर्मोप्लास्टिक शीथ्ड केबल", scope: "1100 V तक के कार्यशील वोल्टेज के लिए XLPE इंसुलेटेड और PVC शीथ्ड केबल। मानक निर्माण, आयाम, विद्युत गुण तथा विद्युत वितरण केबल असेंबली के स्वीकृति परीक्षण निर्धारित करता है।", clause: "बोलीदाता IS 7098 (भाग 1) : 1988, संशोधन 1 से 4 के अनुरूप 3.5 कोर, 1.1 kV ग्रेड XLPE इंसुलेटेड और PVC शीथ्ड पावर केबल प्रस्तुत करेगा। कंडक्टर IS 8130 : 2013 तथा इंसुलेशन और शीथ IS 5831 : 1984 के अनुरूप होंगे।", committee: "विद्युत केबल एवं चालक तकनीकी समिति", reaffirmation: "2023" },
+  "is-12269-2013": { title: "साधारण पोर्टलैंड सीमेंट — 53 ग्रेड", scope: "संरचनात्मक कंक्रीट और उच्च-शक्ति अनुप्रयोगों में प्रयुक्त 53 ग्रेड साधारण पोर्टलैंड सीमेंट की रासायनिक, भौतिक और प्रदर्शन आवश्यकताएँ।", clause: "साधारण पोर्टलैंड सीमेंट 53 ग्रेड IS 12269 : 2013 और संशोधन 1 से 2 के अनुरूप होगा। आपूर्तिकर्ता IS 4032 की रासायनिक आवश्यकताओं तथा IS 4031 श्रृंखला के भौतिक परीक्षणों के प्रमाणपत्र प्रस्तुत करेगा।", committee: "सीमेंट एवं निर्माण सामग्री तकनीकी समिति", reaffirmation: "2023" },
+  "is-1786-2008": { title: "कंक्रीट प्रबलन के लिए उच्च शक्ति विकृत स्टील बार एवं तार", scope: "कंक्रीट प्रबलन हेतु Fe 500D यांत्रिक गुण, रासायनिक संरचना, बंध प्रदर्शन और प्रमाणन सहित उच्च शक्ति विकृत स्टील बार एवं तारों की आवश्यकताएँ।", clause: "प्रबलन स्टील Fe 500D ग्रेड का होगा और IS 1786 : 2008, संशोधन 1 से 3 के अनुरूप होगा। प्रत्येक हीट का पता लगाया जा सके तथा तन्यता, बेंड, री-बेंड और रासायनिक विश्लेषण प्रमाणपत्र उपलब्ध हों।", committee: "लौह एवं इस्पात उत्पाद तकनीकी समिति", reaffirmation: "2022" },
+  "is-13252-crs": { title: "सूचना प्रौद्योगिकी उपकरणों की सुरक्षा — CRS इलेक्ट्रॉनिक्स", scope: "अनिवार्य पंजीकरण योजना के अंतर्गत सूचना प्रौद्योगिकी तथा ऑडियो-विजुअल उपकरणों के विद्युत, तापीय, अग्नि और यांत्रिक सुरक्षा उपाय।", clause: "IT उपकरण IS 13252 (भाग 1) : 2010 के अनुरूप होंगे और सक्रिय MeitY अनिवार्य पंजीकरण योजना में शामिल होंगे। बोलीदाता पंजीकरण विवरण, सुरक्षा परीक्षण रिपोर्ट तथा मॉडल-विशिष्ट चिह्नांकन प्रमाण प्रस्तुत करेगा।", committee: "इलेक्ट्रॉनिक एवं सूचना प्रौद्योगिकी सुरक्षा समिति", reaffirmation: "2024" }
+};
+const graphHi: Record<string, { label: string; detail: string }> = {
+  primary: { label: "IS 7098\n(भाग 1):1988", detail: "प्राथमिक उत्पाद मानक — 1100 V तक XLPE इंसुलेटेड केबल।" }, conductor: { label: "IS 8130:2013", detail: "कंडक्टर सामग्री, प्रतिरोध और स्ट्रैंडिंग आवश्यकताएँ।" }, flame: { label: "IS 10810\nभाग 53", detail: "ऊर्ध्वाधर ज्वाला प्रसार और ज्वाला मंदता परीक्षण विधि।" }, qco: { label: "केबल QCO\n2023", detail: "वैधानिक गुणवत्ता नियंत्रण आदेश — BIS मानक चिह्न अनिवार्य।" }, old: { label: "IS 694:1990", detail: "निविदा प्रारूप में पाया गया वापस लिया गया संदर्भ; उद्धृत न करें।" }, physical: { label: "IS 4031\nश्रृंखला", detail: "सूक्ष्मता, स्थायित्व, सेटिंग और शक्ति के भौतिक परीक्षण।" }, chemical: { label: "IS 4032:\n1985", detail: "हाइड्रोलिक सीमेंट का रासायनिक विश्लेषण।" }, test: { label: "IS 1608:\n2005", detail: "उपज और तन्यता गुणों के लिए धातुओं का यांत्रिक परीक्षण।" }, chem: { label: "हीट-वार\nरसायन", detail: "प्रत्येक हीट के अनुसार रासायनिक संरचना और ट्रेसेबिलिटी।" }, safety: { label: "IS 616:\n2017", detail: "ऑडियो-विजुअल और समान इलेक्ट्रॉनिक उपकरणों की सुरक्षा।" }, marking: { label: "CRS\nपंजीकरण", detail: "मॉडल-विशिष्ट पंजीकरण और उत्पाद चिह्नांकन प्रमाण।" }, crs: { label: "MeitY CRS\nआदेश", detail: "अनिवार्य पंजीकरण योजना में उत्पादों का कवरेज।" }
+};
+const graphKindHi: Record<string, string> = { primary: "प्राथमिक मानक", normative_refs: "अनिवार्य विनिर्देश", test_methods: "मानक परीक्षण विधि", qco_mandates: "लागू गुणवत्ता आदेश", superseded_refs: "वापस लिया गया संदर्भ" };
+export function localizeStandard(standard: StandardResult, language: Language): StandardResult { if (language === "en") return standard; const localized = dossierHi[standard.id] ?? {}; return { ...standard, title: localized.title ?? standard.title, scope: localized.scope ?? standard.scope, clause: localized.clause ?? standard.clause, amendments: localized.amendments ?? standard.amendments, allied: standard.allied.map((item) => ({ ...item, title: item.title, relevance: item.relevance })) }; }
+export function dossierDeepLabel(language: Language, key: "committee" | "reaffirmation" | "amendments" | "scope") { return tx(language, key === "committee" ? "technicalCommittee" : key === "reaffirmation" ? "reaffirmationYear" : key === "amendments" ? "amendmentNumber" : "scopeApplication"); }
+export function dossierDeepValue(standard: StandardResult, key: "committee" | "reaffirmation", language: Language = "hi") { const item = dossierHi[standard.id]; if (language === "en") return key === "committee" ? "BIS Technical Committee" : standard.year; return key === "committee" ? item?.committee ?? "भारतीय मानक तकनीकी समिति" : item?.reaffirmation ?? "2023"; }
+export function localizeGraphNode(node: GraphNode, language: Language): GraphNode { if (language === "en") return node; const localized = graphHi[node.id]; return localized ? { ...node, ...localized } : node; }
+export function graphKindLabel(kind: GraphNode["kind"], language: Language) { return language === "hi" ? graphKindHi[kind] : ({ primary: "Primary standard", normative_refs: "Normative reference", test_methods: "Test method", qco_mandates: "QCO / legal order", superseded_refs: "Superseded reference" }[kind]); }
+export function localizedRelation(label: string, language: Language) { if (language === "en") return label; return ({ requires: "आवश्यक", "tested by": "परीक्षित", "mandated by": "द्वारा अनिवार्य", "superseded by": "द्वारा प्रतिस्थापित", "analysed by": "द्वारा विश्लेषित", "verified by": "द्वारा सत्यापित" } as Record<string, string>)[label] ?? label; }
