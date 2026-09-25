@@ -470,7 +470,7 @@ export function activeLanguageCopy(language: Language) { return language === "hi
 export function apiModeLabel(connected: boolean) { return connected ? "FASTAPI ONLINE" : "STANDALONE FALLBACK"; }
 export function demoModeCopy() { return "Fallback data is active while the FastAPI service is offline."; }
 export function apiConnectedCopy() { return "Live local service connected; data still remains deterministic."; }
-export function footerDisclaimer() { return "// Verified against BIS Gazette & Statutory QCO Orders · Zero-Hallucination Deterministic Index"; }
+export function footerDisclaimer() { return "Verified against BIS Gazette & Statutory QCO Orders · Zero-Hallucination Deterministic Index"; }
 export function graphCopyText() { return "The graph is a verified relationship map, not a generative answer."; }
 export function defaultQuery() { return "3.5 core XLPE cable 1.1kV"; }
 export function defaultLanguage(): Language { return "en"; }
