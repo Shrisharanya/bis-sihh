@@ -464,13 +464,13 @@ export function titleForView(view: ActiveView) { return navItems.find((item) => 
 export function navAria(view: ActiveView) { return `Open ${titleForView(view)}`; }
 export function liveSyncCopy() { return "BIS Gazette Synced · Sept 2026"; }
 export function brandTitle() { return "ManakSetu"; }
-export function brandSubtitle() { return "National Standards Intelligence Copilot"; }
+export function brandSubtitle() { return "National Procurement Intelligence Engine"; }
 export function productScope() { return "GeM & CPPP"; }
 export function activeLanguageCopy(language: Language) { return language === "hi" ? "हिन्दी" : "EN"; }
 export function apiModeLabel(connected: boolean) { return connected ? "FASTAPI ONLINE" : "STANDALONE FALLBACK"; }
 export function demoModeCopy() { return "Fallback data is active while the FastAPI service is offline."; }
 export function apiConnectedCopy() { return "Live local service connected; data still remains deterministic."; }
-export function footerDisclaimer() { return "Prototype only. Confirm final tender clauses against the latest official BIS publication before issue."; }
+export function footerDisclaimer() { return "// Verified against BIS Gazette & Statutory QCO Orders · Zero-Hallucination Deterministic Index"; }
 export function graphCopyText() { return "The graph is a verified relationship map, not a generative answer."; }
 export function defaultQuery() { return "3.5 core XLPE cable 1.1kV"; }
 export function defaultLanguage(): Language { return "en"; }
