@@ -20,6 +20,14 @@ export async function setupVite(app: Express, server: Server) {
     appType: "custom",
   });
 
+  const publicDir = fs.existsSync(path.resolve(process.cwd(), "client", "public"))
+    ? path.resolve(process.cwd(), "client", "public")
+    : path.resolve(import.meta.dirname, "../..", "client", "public");
+
+  if (fs.existsSync(publicDir)) {
+    app.use(express.static(publicDir));
+  }
+
   app.use(vite.middlewares);
   app.use("*", async (req, res, next) => {
     const url = req.originalUrl;
