@@ -178,10 +178,39 @@ export async function apiAudit(file?: File): Promise<AuditResponse> {
     if (file) form.append("file", file);
     const response = await apiFetch("/audit-tender", { method: "POST", body: form });
     if (!response.ok) throw new Error("API unavailable");
-    return (await response.json()) as AuditResponse;
+    return normalizeAuditResponse(await response.json());
   } catch {
     return fallbackAudit;
   }
+}
+
+function normalizeAuditResponse(data: unknown): AuditResponse {
+  const source = data && typeof data === "object" ? data as Record<string, unknown> : {};
+  const rawItems = Array.isArray(source.items) ? source.items : [];
+  const items: AuditItem[] = rawItems.map((raw, index) => {
+    const item = raw && typeof raw === "object" ? raw as Record<string, unknown> : {};
+    const status = item.status === "compliant" ? "compliant" : "critical";
+    return {
+      line: typeof item.line === "string" && item.line ? item.line : `Line Item ${index + 1}`,
+      title: typeof item.title === "string" ? item.title : "Unspecified tender item",
+      standard: typeof item.standard === "string" ? item.standard : "Reference not supplied",
+      status,
+      finding: typeof item.finding === "string" ? item.finding : "No finding text supplied.",
+      recommendation: typeof item.recommendation === "string" ? item.recommendation : "Review the tender item against the applicable BIS record.",
+    };
+  });
+  const rawSummary = source.summary && typeof source.summary === "object" ? source.summary as Record<string, unknown> : {};
+  const critical = typeof rawSummary.critical === "number" ? rawSummary.critical : items.filter((item) => item.status === "critical").length;
+  const compliant = typeof rawSummary.compliant === "number" ? rawSummary.compliant : items.filter((item) => item.status === "compliant").length;
+  return {
+    fileName: typeof source.fileName === "string" && source.fileName ? source.fileName : "Tender_Document.pdf",
+    items,
+    summary: {
+      critical,
+      compliant,
+      coverage: typeof rawSummary.coverage === "string" ? rawSummary.coverage : "0%",
+    },
+  };
 }
 
 export async function apiAuditCorrected(): Promise<AuditResponse> {
