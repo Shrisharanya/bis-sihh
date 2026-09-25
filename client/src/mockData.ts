@@ -38,7 +38,7 @@ export const domainOrder: DomainKey[] = ["cables", "cement", "steel", "electroni
 
 export const savedDrafts: SavedDraft[] = [
   { id: "NIT-204", title: "33kV Substation Cables", standard: "IS 7098 (Part 1) : 1988", updated: "Today · 11:42 IST", status: "Saved" },
-  { id: "NIT-188", title: "Bridge Pier 53G Cement Supply", standard: "IS 12269 : 2013", updated: "21 Sep · 16:05 IST", status: "Review" },
+  { id: "NIT-188", title: "Bridge Pier 53G Cement Supply", standard: "IS 269 : 2015", updated: "21 Sep · 16:05 IST", status: "Review" },
   { id: "NIT-163", title: "Fe 500D Reinforcement Package", standard: "IS 1786 : 2008", updated: "18 Sep · 09:18 IST", status: "Saved" },
 ];
 export const auditHistory: AuditHistoryEntry[] = [
@@ -47,9 +47,23 @@ export const auditHistory: AuditHistoryEntry[] = [
   { id: "AUD-603", file: "IT_Peripherals_CRS.docx", date: "19 Sep 2026 · 10:36", status: "Audit Pending" },
 ];
 
+export const SUPERSEDED_RECORDS = [
+  { withdrawn: "IS 12269 : 2013", replacement: "IS 269 : 2015", status: "verified replacement" },
+  { withdrawn: "IS 694 : 1990", replacement: "IS 694 : 2010", status: "verified replacement" },
+] as const;
+
+export const civilAuditSample: AuditResponse = {
+  fileName: "NIT-108_Bridge_Pier_Cement.pdf",
+  items: [
+    { line: "Line Item 1", title: "Ordinary Portland Cement 53 Grade", standard: "IS 12269 : 2013", status: "critical", finding: "Cited cement standard is withdrawn and superseded by the unified OPC standard.", recommendation: "Replace with IS 269 : 2015 and retain current physical and chemical test evidence." },
+    { line: "Line Item 2", title: "High-strength deformed steel bar Fe 500D", standard: "IS 1786 : 2008", status: "compliant", finding: "Reference is active for the cited product class.", recommendation: "Retain reference and request heat-wise certificate." },
+  ],
+  summary: { critical: 1, compliant: 1, coverage: "82%" },
+};
+
 export const graphByDomain: Record<DomainKey, { nodes: GraphNode[]; edges: GraphEdge[] }> = {
   cables: { nodes: [{ id: "primary", label: "IS 7098\n(Part 1):1988", kind: "primary", x: 50, y: 46, detail: "Primary product standard — XLPE insulated cables up to 1100 V." }, { id: "conductor", label: "IS 8130:2013", kind: "normative_refs", x: 18, y: 20, detail: "Conductor material, resistance and stranding requirements." }, { id: "flame", label: "IS 10810\nPart 53", kind: "test_methods", x: 82, y: 70, detail: "Vertical flame propagation and flame retardance test method." }, { id: "qco", label: "Cables QCO\n2023", kind: "qco_mandates", x: 50, y: 88, detail: "Statutory Quality Control Order — BIS Standard Mark mandatory." }, { id: "old", label: "IS 694:1990", kind: "superseded_refs", x: 8, y: 47, detail: "Withdrawn reference detected in tender draft; do not cite." }], edges: [{ from: "primary", to: "conductor", label: "requires" }, { from: "primary", to: "flame", label: "tested by" }, { from: "primary", to: "qco", label: "mandated by" }, { from: "old", to: "primary", label: "superseded by" }] },
-  cement: { nodes: [{ id: "primary", label: "IS 12269:\n2013", kind: "primary", x: 50, y: 46, detail: "Primary standard — Ordinary Portland Cement, 53 Grade." }, { id: "physical", label: "IS 4031\nSeries", kind: "test_methods", x: 20, y: 28, detail: "Physical tests for fineness, soundness, setting and strength." }, { id: "chemical", label: "IS 4032:\n1985", kind: "normative_refs", x: 80, y: 27, detail: "Chemical analysis of hydraulic cement." }, { id: "qco", label: "Cement QCO\n2003", kind: "qco_mandates", x: 50, y: 84, detail: "Cement Quality Control Order — ISI Mark mandatory." }], edges: [{ from: "primary", to: "physical", label: "tested by" }, { from: "primary", to: "chemical", label: "analysed by" }, { from: "primary", to: "qco", label: "mandated by" }] },
+  cement: { nodes: [{ id: "primary", label: "IS 269:\n2015", kind: "primary", x: 50, y: 46, detail: "Primary standard — Ordinary Portland Cement, 33, 43 and 53 Grade." }, { id: "physical", label: "IS 4031\nSeries", kind: "test_methods", x: 20, y: 28, detail: "Physical tests for fineness, soundness, setting and strength." }, { id: "chemical", label: "IS 4032:\n1985", kind: "normative_refs", x: 80, y: 27, detail: "Chemical analysis of hydraulic cement." }, { id: "qco", label: "Cement QCO\n2003", kind: "qco_mandates", x: 50, y: 84, detail: "Cement Quality Control Order — ISI Mark mandatory." }], edges: [{ from: "primary", to: "physical", label: "tested by" }, { from: "primary", to: "chemical", label: "analysed by" }, { from: "primary", to: "qco", label: "mandated by" }] },
   steel: { nodes: [{ id: "primary", label: "IS 1786:\n2008", kind: "primary", x: 50, y: 46, detail: "Primary standard — Fe 500D high-strength reinforcement steel." }, { id: "test", label: "IS 1608:\n2005", kind: "test_methods", x: 19, y: 25, detail: "Mechanical testing of metals for yield and tensile properties." }, { id: "chem", label: "Heat-wise\nChemistry", kind: "normative_refs", x: 81, y: 26, detail: "Chemical composition and traceability per heat." }, { id: "qco", label: "Steel QCO\n2024", kind: "qco_mandates", x: 50, y: 84, detail: "Steel Products Quality Control Order — BIS mark mandatory." }], edges: [{ from: "primary", to: "test", label: "tested by" }, { from: "primary", to: "chem", label: "verified by" }, { from: "primary", to: "qco", label: "mandated by" }] },
   electronics: { nodes: [{ id: "primary", label: "IS 13252\nPart 1:2010", kind: "primary", x: 50, y: 46, detail: "Primary standard — safety of IT equipment under CRS." }, { id: "safety", label: "IS 616:\n2017", kind: "test_methods", x: 18, y: 25, detail: "Safety of audio-video and similar electronic apparatus." }, { id: "marking", label: "CRS\nRegistration", kind: "normative_refs", x: 82, y: 25, detail: "Model-specific registration and product marking evidence." }, { id: "crs", label: "MeitY CRS\nOrder", kind: "qco_mandates", x: 50, y: 84, detail: "Compulsory Registration Scheme product coverage." }], edges: [{ from: "primary", to: "safety", label: "tested by" }, { from: "primary", to: "marking", label: "requires" }, { from: "primary", to: "crs", label: "mandated by" }] },
 };

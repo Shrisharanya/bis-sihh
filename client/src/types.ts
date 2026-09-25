@@ -70,14 +70,14 @@ export const fallbackCable: StandardResult = {
 };
 
 export const fallbackCement: StandardResult = {
-  id: "is-12269-2013", code: "IS 12269 : 2013", title: "Ordinary Portland Cement — 53 Grade", status: "CURRENT & ACTIVE", year: "2013", ics: "91.100.10",
-  scope: "Requirements for ordinary Portland cement of 53 grade used for structural concrete and high-strength applications, including chemical, physical and performance requirements.", confidence: 97.8,
+  id: "is-269-2015", code: "IS 269 : 2015", title: "Ordinary Portland Cement (33, 43 & 53 Grade)", status: "CURRENT & ACTIVE", year: "2015", ics: "91.100.10",
+  scope: "Covers physical and chemical requirements for 33, 43, and 53 Grade OPC. Supersedes IS 8112 and IS 12269.", confidence: 98.1,
   qco: "Cement (Quality Control) Order, 2003", qcoShort: "Cement QCO 2003", scheme: "ISI Mark Scheme I", amendments: "Amendments 1 to 2",
   allied: [
     { code: "IS 4031 Series", title: "Methods of physical tests for hydraulic cement", group: "Physical tests", relevance: "Fineness, soundness, setting time and strength", verified: true },
     { code: "IS 4032 : 1985", title: "Method of chemical analysis of hydraulic cement", group: "Chemical analysis", relevance: "Chemical composition and loss on ignition", verified: true },
   ],
-  clause: "Ordinary Portland Cement 53 Grade shall conform to IS 12269 : 2013 with Amendments 1 to 2. The supplier shall furnish a valid BIS licence and test certificates covering the chemical requirements of IS 4032 and physical tests under the IS 4031 series. Each consignment shall be accompanied by batch-wise conformity documentation.",
+  clause: "Ordinary Portland Cement in 33, 43 and 53 Grade shall conform to IS 269 : 2015. The supplier shall furnish a valid BIS licence and test certificates covering the chemical requirements of IS 4032 and physical tests under the IS 4031 series. Each consignment shall be accompanied by batch-wise conformity documentation.",
 };
 
 export const fallbackAudit: AuditResponse = {
@@ -112,7 +112,7 @@ export const apiState: ApiState = { connected: false, lastSync: "22 Sep 2026 · 
 export function routeSearch(query: string): SearchResponse {
   const normalized = query.toLowerCase();
   const isCable = ["cable", "xlpe", "तार", "केबल", "1.1kv", "7098"].some((term) => normalized.includes(term));
-  return { primary: isCable ? fallbackCable : fallbackCement, matchedOn: isCable ? ["XLPE", "cable", "1.1 kV", "IS 7098"] : ["cement", "53 grade", "IS 12269"] };
+  return { primary: isCable ? fallbackCable : fallbackCement, matchedOn: isCable ? ["XLPE", "cable", "1.1 kV", "IS 7098"] : ["cement", "33 / 43 / 53 grade", "IS 269"] };
 }
 
 export interface SearchFilters {
@@ -369,7 +369,7 @@ export function getQuickQueries(language: Language) { return language === "hi" ?
 export function formatSearchHint(language: Language) { return language === "hi" ? "मानक, उत्पाद या निविदा आवश्यकता खोजें…" : "Search a product, requirement or BIS code…"; }
 export function searchPlaceholder(language: Language) { return formatSearchHint(language); }
 export function safeCopy(text: string) { if (typeof navigator !== "undefined" && navigator.clipboard) navigator.clipboard.writeText(text).catch(() => undefined); }
-export function getClauseForStandard(standard: StandardResult): ClauseDraft { return standard.id === fallbackCement.id ? { heading: "6.1  Cement — conformity and testing", body: standard.clause, source: "Synthesized from IS 12269:2013 • IS 4031 series • IS 4032:1985" } : defaultClause; }
+export function getClauseForStandard(standard: StandardResult): ClauseDraft { return standard.id === fallbackCement.id ? { heading: "6.1  Cement — conformity and testing", body: standard.clause, source: "Synthesized from IS 269:2015 • IS 4031 series • IS 4032:1985" } : defaultClause; }
 export function clauseForStandard(standard: StandardResult) { return getClauseForStandard(standard); }
 export function clauseSourceText(standard: StandardResult) { return clauseForStandard(standard).source; }
 export function sourceCount(standard: StandardResult) { return (standard?.allied?.length ?? 0) + 1; }
