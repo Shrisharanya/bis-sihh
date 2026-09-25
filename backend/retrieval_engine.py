@@ -41,6 +41,13 @@ class RetrievalEngine:
             "cement": "cement",
             "concrete": "cement",
             "opc": "cement",
+            "portland": "cement",
+            "portland cement": "cement",
+            "53 grade": "cement",
+            "43 grade": "cement",
+            "33 grade": "cement",
+            "is 269": "cement",
+            "is 12269": "cement",
             "सीमेंट": "cement",
             "steel": "steel",
             "rebar": "steel",
@@ -229,7 +236,7 @@ class RetrievalEngine:
             if primary_domain == "cables":
                 matched_terms = ["XLPE", "cable", "1.1 kV", "IS 7098"]
             elif primary_domain == "cement":
-                matched_terms = ["cement", "53 grade", "IS 12269"]
+                matched_terms = ["cement", "53 grade", "IS 269"]
             elif primary_domain == "steel":
                 matched_terms = ["steel", "Fe 500D", "IS 1786"]
             else:

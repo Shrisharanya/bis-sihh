@@ -207,10 +207,16 @@ def test_audit_tender_upload_txt():
     data = res.json()
 
     assert data["filename"] == "Tender_CPWD_Civil.txt"
-    assert data["defects_count"] >= 1
+    assert data["defects_count"] == 2
     superseded = [it for it in data["items"] if it["status"] == "SUPERSEDED_WITHDRAWN"]
-    assert "IS 269" in superseded[0]["cited_code"]
-    assert "IS 12269" in superseded[0]["replacement_code"]
+    assert len(superseded) == 2
+    # Check that IS 12269 is flagged as superseded by IS 269 : 2015
+    is_12269 = next(it for it in superseded if "12269" in it["cited_code"])
+    assert "IS 269 : 2015" in is_12269["replacement_code"]
+    assert is_12269["risk_severity"] == "CRITICAL"
+    # Check that IS 269 : 1976 is flagged as superseded by IS 269 : 2015
+    is_269 = next(it for it in superseded if "269" in it["cited_code"] and "12269" not in it["cited_code"])
+    assert "IS 269 : 2015" in is_269["replacement_code"]
 
 
 def test_audit_tender_upload_corrupted_fallback():
@@ -312,7 +318,7 @@ def test_search_multi_domain_standards():
     # Cement
     res = client.post("/api/search", json={"query": "Ordinary Portland Cement 53 grade", "domain": "cement"})
     assert res.status_code == 200
-    assert res.json()["primary"]["code"] == "IS 12269 : 2013"
+    assert res.json()["primary"]["code"] == "IS 269 : 2015"
 
     # Steel
     res = client.post("/api/search", json={"query": "Fe 500D TMT high strength deformed steel rebar"})
@@ -323,6 +329,31 @@ def test_search_multi_domain_standards():
     res = client.post("/api/search", json={"query": "IT Equipment Safety MeitY CRS hardware"})
     assert res.status_code == 200
     assert res.json()["primary"]["code"] == "IS 13252 (Part 1) : 2010"
+
+
+def test_cement_opc_53_grade_supersession_verification():
+    # 1. Search for "Portland Cement 53 Grade" returns IS 269 : 2015 as the primary active standard
+    res = client.post("/api/search", json={"query": "Portland Cement 53 Grade"})
+    assert res.status_code == 200
+    data = res.json()
+    assert data["primary"]["code"] == "IS 269 : 2015"
+    assert "CURRENT & ACTIVE" in data["primary"]["status"]
+    assert data["primary"]["year"] == "2015"
+    assert "IS 8112" in data["primary"]["scope"] and "IS 12269" in data["primary"]["scope"]
+
+    # 2. Audit on text citing "IS 12269" flags it as superseded by IS 269 : 2015
+    audit_txt = (
+        "Clause 4.1 The contractor shall supply Ordinary Portland Cement 53 Grade conforming to IS 12269 : 2013."
+    ).encode("utf-8")
+    audit_res = client.post("/api/audit-tender/upload", files={"file": ("tender_cement.txt", audit_txt, "text/plain")})
+    assert audit_res.status_code == 200
+    audit_data = audit_res.json()
+    assert audit_data["defects_count"] >= 1
+    defect = next(it for it in audit_data["items"] if "12269" in it["cited_code"])
+    assert defect["status"] == "SUPERSEDED_WITHDRAWN"
+    assert "IS 269 : 2015" in defect["replacement_code"]
+    assert defect["risk_severity"] == "CRITICAL"
+    assert "withdrawn by BIS" in defect["rationale"] or "unified" in defect["rationale"]
 
 
 def test_knowledge_graph_endpoints():

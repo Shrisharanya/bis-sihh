@@ -73,21 +73,21 @@ CABLE = {
 
 # --- DOMAIN 2: CEMENT ---
 CEMENT = {
-    "id": "is-12269-2013",
-    "code": "IS 12269 : 2013",
-    "title": "Ordinary Portland Cement — 53 Grade",
+    "id": "is-269-2015",
+    "code": "IS 269 : 2015",
+    "title": "Ordinary Portland Cement — Specification (Sixth Revision, unifying 33, 43, and 53 Grades)",
     "domain": "cement",
     "status": "CURRENT & ACTIVE",
-    "year": "2013",
+    "year": "2015",
     "ics": "91.100.10",
-    "scope": "Requirements for ordinary Portland cement of 53 grade used for structural concrete and high-strength applications, including chemical, physical and performance requirements.",
-    "confidence": 97.8,
+    "scope": "Covers manufacture, chemical and physical requirements for Ordinary Portland Cement of 33, 43, and 53 grades. Supersedes IS 8112 and IS 12269.",
+    "confidence": 98.5,
     "qco": "Cement (Quality Control) Order, 2003",
     "qcoShort": "Cement QCO 2003",
     "qco_mandatory": True,
     "scheme": "ISI Mark Scheme I",
     "scheme_type": "ISI",
-    "amendments": "Amendments 1 to 2",
+    "amendments": "Amendments 1 to 3",
     "allied": [
         {"code": "IS 4031 Series", "title": "Methods of physical tests for hydraulic cement", "group": "Physical tests", "relevance": "Fineness, soundness, setting time and strength", "verified": True},
         {"code": "IS 4031 (Part 6)", "title": "Methods of physical tests for hydraulic cement: Compressive strength", "group": "Physical tests", "relevance": "Compressive strength determination at 3, 7, and 28 days", "verified": True},
@@ -99,9 +99,9 @@ CEMENT = {
         {
             "clause_id": "cement-c1",
             "clause_number": "Clause 6.1",
-            "title": "Compressive Strength Requirements",
+            "title": "Compressive Strength Requirements (33, 43, 53 Grades)",
             "category": "mechanical_specs",
-            "text": "The compressive strength of mortar cubes tested in accordance with IS 4031 (Part 6) shall be: 72±1 hours (3 days) not less than 27 MPa; 168±2 hours (7 days) not less than 37 MPa; and 672±4 hours (28 days) not less than 53 MPa.",
+            "text": "The compressive strength of mortar cubes tested in accordance with IS 4031 (Part 6) shall satisfy the specified minimum strengths: For 53 Grade OPC: 72±1 hours (3 days) not less than 27 MPa; 168±2 hours (7 days) not less than 37 MPa; and 672±4 hours (28 days) not less than 53 MPa.",
             "normative_ref": "IS 4031 (Part 6)",
         },
         {
@@ -133,11 +133,11 @@ CEMENT = {
             "clause_number": "Clause 12.1",
             "title": "Mandatory Cement QCO ISI Certification",
             "category": "regulatory_qco",
-            "text": "Each bag or bulk container of 53 Grade OPC shall bear the BIS Standard Mark (ISI) with valid license number as mandated under the Cement (Quality Control) Order, 2003.",
+            "text": "Each bag or bulk container of Ordinary Portland Cement (33, 43, or 53 Grade) shall bear the BIS Standard Mark (ISI) with valid license number as mandated under the Cement (Quality Control) Order, 2003.",
             "normative_ref": "Cement QCO 2003",
         },
     ],
-    "clause": "Ordinary Portland Cement 53 Grade shall conform to IS 12269 : 2013 with Amendments 1 to 2. The supplier shall furnish a valid BIS licence and test certificates covering the chemical requirements of IS 4032 and physical tests under the IS 4031 series. Each consignment shall be accompanied by batch-wise conformity documentation.",
+    "clause": "Ordinary Portland Cement (33, 43, and 53 Grades) shall conform to IS 269 : 2015 (Sixth Revision) with current amendments. The supplier shall furnish a valid BIS licence and test certificates covering the chemical requirements of IS 4032 and physical tests under the IS 4031 series. Each consignment shall be accompanied by batch-wise conformity documentation.",
 }
 
 # --- DOMAIN 3: STEEL ---
@@ -287,13 +287,13 @@ GRAPHS: Dict[str, Dict[str, Any]] = {
     },
     "cement": {
         "nodes": [
-            {"id": "primary", "label": "IS 12269:2013", "kind": "primary", "x": 50, "y": 46, "detail": "Primary product standard — Ordinary Portland Cement 53 Grade."},
+            {"id": "primary", "label": "IS 269:2015", "kind": "primary", "x": 50, "y": 46, "detail": "Primary product standard — Ordinary Portland Cement (unifying 33, 43, 53 Grades)."},
             {"id": "compressive", "label": "IS 4031 (Part 6)", "kind": "test_methods", "x": 20, "y": 25, "detail": "Compressive strength determination at 3, 7, and 28 days."},
             {"id": "soundness", "label": "IS 4031 (Part 3)", "kind": "test_methods", "x": 20, "y": 70, "detail": "Soundness testing by Le Chatelier and autoclave methods."},
             {"id": "chemical", "label": "IS 4032:1985", "kind": "test_methods", "x": 80, "y": 25, "detail": "Chemical analysis for insoluble residue, loss on ignition, and magnesia."},
             {"id": "sampling", "label": "IS 4987:1993", "kind": "normative_refs", "x": 80, "y": 70, "detail": "Recommendations for sampling and batch acceptance."},
             {"id": "qco", "label": "Cement QCO 2003", "kind": "qco_mandates", "x": 50, "y": 88, "detail": "Mandatory BIS certification under Cement (Quality Control) Order."},
-            {"id": "old", "label": "IS 269:1976", "kind": "superseded_refs", "x": 10, "y": 48, "detail": "Obsolete cement standard for structural high-strength applications."},
+            {"id": "old", "label": "IS 12269:2013", "kind": "superseded_refs", "x": 10, "y": 48, "detail": "Withdrawn & superseded 53 Grade OPC standard; unified into IS 269:2015."},
         ],
         "edges": [
             {"from": "primary", "to": "compressive", "label": "tested by"},
@@ -389,25 +389,69 @@ SUPERSEDED_CATALOG = [
         "recommendation": "Replace with IS 694 : 2010 + Amendments 1 to 4 and mandate IS 10810 Part 53 flame test.",
     },
     {
-        "pattern": "is 269 : 1976",
-        "alias_patterns": ["is 269:1976", "is 269", "is269"],
+        "pattern": "is 12269 : 2013",
+        "alias_patterns": ["is 12269:2013", "is 12269", "is12269"],
         "domain": "cement",
-        "title": "Structural High Strength Cement",
+        "title": "Ordinary Portland Cement 53 Grade",
+        "bad_code": "IS 12269 : 2013",
+        "cited_code": "IS 12269 : 2013",
+        "status": "SUPERSEDED_WITHDRAWN",
+        "flag": "SUPERSEDED_WITHDRAWN",
+        "good_code": "IS 269 : 2015 (Unified Ordinary Portland Cement Specification)",
+        "replacement": "IS 269 : 2015 (Unified Ordinary Portland Cement Specification)",
+        "replacement_code": "IS 269 : 2015 (Unified Ordinary Portland Cement Specification)",
+        "risk_severity": "CRITICAL",
+        "missing_tests": [
+            "IS 4031 (Part 6) - 28-day Compressive Strength Test (53 Grade)",
+            "IS 4032 : 1985 - Chemical Composition Limits",
+            "IS 4987 : 1993 - Sampling and Lot Acceptance Criteria",
+        ],
+        "rationale": "IS 12269 was withdrawn by BIS following the revision of IS 269 : 2015, which unified 33, 43, and 53 Grade OPC under one standard.",
+        "finding": "Cited standard IS 12269 : 2013 is withdrawn and superseded. 53 Grade OPC must be procured under unified IS 269 : 2015.",
+        "recommendation": "Replace with IS 269 : 2015 (Unified Ordinary Portland Cement Specification) and mandate Cement QCO 2003 compliance.",
+    },
+    {
+        "pattern": "is 8112 : 2013",
+        "alias_patterns": ["is 8112:2013", "is 8112", "is8112"],
+        "domain": "cement",
+        "title": "Ordinary Portland Cement 43 Grade",
+        "bad_code": "IS 8112 : 2013",
+        "cited_code": "IS 8112 : 2013",
+        "status": "SUPERSEDED_WITHDRAWN",
+        "flag": "SUPERSEDED_WITHDRAWN",
+        "good_code": "IS 269 : 2015 (Unified Ordinary Portland Cement Specification)",
+        "replacement": "IS 269 : 2015 (Unified Ordinary Portland Cement Specification)",
+        "replacement_code": "IS 269 : 2015 (Unified Ordinary Portland Cement Specification)",
+        "risk_severity": "CRITICAL",
+        "missing_tests": [
+            "IS 4031 (Part 6) - Compressive Strength Test (43 Grade)",
+            "IS 4032 : 1985 - Chemical Composition Limits",
+            "IS 4987 : 1993 - Sampling and Lot Acceptance Criteria",
+        ],
+        "rationale": "IS 8112 was withdrawn by BIS following the revision of IS 269 : 2015, which unified 33, 43, and 53 Grade OPC under one standard.",
+        "finding": "Cited standard IS 8112 is withdrawn and superseded by IS 269 : 2015.",
+        "recommendation": "Replace with IS 269 : 2015 (Unified Ordinary Portland Cement Specification) and mandate Cement QCO 2003 compliance.",
+    },
+    {
+        "pattern": "is 269 : 1976",
+        "alias_patterns": ["is 269:1976", "is 269:1989", "is 269 : 1989"],
+        "domain": "cement",
+        "title": "Ordinary Portland Cement (Obsolete Revisions)",
         "bad_code": "IS 269 : 1976",
         "cited_code": "IS 269 : 1976",
         "status": "SUPERSEDED_WITHDRAWN",
         "flag": "SUPERSEDED_WITHDRAWN",
-        "good_code": "IS 12269 : 2013 (53 Grade OPC)",
-        "replacement": "IS 12269 : 2013 (53 Grade OPC)",
-        "replacement_code": "IS 12269 : 2013",
+        "good_code": "IS 269 : 2015 (Unified Ordinary Portland Cement Specification)",
+        "replacement": "IS 269 : 2015 (Unified Ordinary Portland Cement Specification)",
+        "replacement_code": "IS 269 : 2015 (Unified Ordinary Portland Cement Specification)",
         "risk_severity": "CRITICAL",
         "missing_tests": [
             "IS 4031 (Part 6) - 28-day Compressive Strength Test",
             "IS 4032 : 1985 - Chemical Composition Limits",
         ],
-        "rationale": "IS 269:1976 is obsolete for 53 Grade high-strength concrete under Cement QCO 2003.",
-        "finding": "IS 269:1976 is obsolete for 53 Grade high-strength concrete. Missing mandatory IS 4031 (Part 6) compressive strength clause.",
-        "recommendation": "Specify IS 12269 : 2013 with batch-wise IS 4031 Part 6 test certification and Cement QCO 2003 compliance.",
+        "rationale": "Older editions of IS 269 (1976, 1989) are superseded by IS 269 : 2015 (Sixth Revision), which unified 33, 43, and 53 Grade OPC under one standard.",
+        "finding": "Obsolete edition of IS 269 cited. Must be updated to the Sixth Revision IS 269 : 2015.",
+        "recommendation": "Update to IS 269 : 2015 (Sixth Revision) with batch-wise IS 4031 test certification and Cement QCO 2003 compliance.",
     },
     {
         "pattern": "is 432",
@@ -459,10 +503,15 @@ BILINGUAL_CLAUSES = {
         "en": "The supplied material shall strictly conform to IS 7098 (Part 1) : 1988 including all current amendments. Conductor materials and testing protocols must comply with IS 8130 : 2013 and IS 10810 (Series). Product must bear mandatory ISI Certification mark in compliance with Wires and Cables (Quality Control) Order, 2023.",
         "hi": "आपूर्त सामग्री को नवीनतम संशोधनों सहित IS 7098 (Part 1) : 1988 के पूर्णतः अनुरूप होना अनिवार्य है। चालक सामग्री IS 8130 : 2013 तथा परीक्षण विधियाँ IS 10810 शृंखला के अनुरूप होंगी। उत्पाद पर तार एवं केबल (गुणवत्ता नियंत्रण) आदेश, 2023 के अंतर्गत अनिवार्य ISI प्रमाणन चिह्न (योजना-I) होना अनिवार्य है।",
     },
+    "is-269-2015": {
+        "code": "IS 269 : 2015",
+        "en": "The supplied material shall strictly conform to IS 269 : 2015 (Sixth Revision, unifying 33, 43, and 53 Grades) including all current amendments. Physical tests and 28-day compressive strength (minimum 53 MPa for 53 Grade) must comply with IS 4031 (Series) and chemical analysis with IS 4032. Product must bear mandatory ISI Certification mark in compliance with Cement (Quality Control) Order, 2003.",
+        "hi": "आपूर्त सामग्री को नवीनतम संशोधनों सहित IS 269 : 2015 (छठा पुनरीक्षण, 33, 43 और 53 ग्रेड का एकीकरण) के पूर्णतः अनुरूप होना अनिवार्य है। भौतिक परीक्षण एवं 28-दिवसीय संपीड़न सामर्थ्य (53 ग्रेड के लिए न्यूनतम 53 MPa) IS 4031 शृंखला तथा रासायनिक विश्लेषण IS 4032 के अनुरूप होना चाहिए। उत्पाद पर सीमेंट (गुणवत्ता नियंत्रण) आदेश, 2003 के अंतर्गत अनिवार्य ISI प्रमाणन चिह्न होना अनिवार्य है।",
+    },
     "is-12269-2013": {
-        "code": "IS 12269 : 2013",
-        "en": "The supplied material shall strictly conform to IS 12269 : 2013 including all current amendments. Physical tests and 28-day compressive strength (minimum 53 MPa) must comply with IS 4031 (Series) and chemical analysis with IS 4032. Product must bear mandatory ISI Certification mark in compliance with Cement (Quality Control) Order, 2003.",
-        "hi": "आपूर्त सामग्री को नवीनतम संशोधनों सहित IS 12269 : 2013 के पूर्णतः अनुरूप होना अनिवार्य है। भौतिक परीक्षण एवं 28-दिवसीय संपीड़न सामर्थ्य (न्यूनतम 53 MPa) IS 4031 शृंखला तथा रासायनिक विश्लेषण IS 4032 के अनुरूप होना चाहिए। उत्पाद पर सीमेंट (गुणवत्ता नियंत्रण) आदेश, 2003 के अंतर्गत अनिवार्य ISI प्रमाणन चिह्न होना अनिवार्य है।",
+        "code": "IS 269 : 2015",
+        "en": "The supplied material shall strictly conform to IS 269 : 2015 (Sixth Revision, unifying 33, 43, and 53 Grades) including all current amendments. Physical tests and 28-day compressive strength (minimum 53 MPa for 53 Grade) must comply with IS 4031 (Series) and chemical analysis with IS 4032. Product must bear mandatory ISI Certification mark in compliance with Cement (Quality Control) Order, 2003.",
+        "hi": "आपूर्त सामग्री को नवीनतम संशोधनों सहित IS 269 : 2015 (छठा पुनरीक्षण, 33, 43 और 53 ग्रेड का एकीकरण) के पूर्णतः अनुरूप होना अनिवार्य है। भौतिक परीक्षण एवं 28-दिवसीय संपीड़न सामर्थ्य (53 ग्रेड के लिए न्यूनतम 53 MPa) IS 4031 शृंखला तथा रासायनिक विश्लेषण IS 4032 के अनुरूप होना चाहिए। उत्पाद पर सीमेंट (गुणवत्ता नियंत्रण) आदेश, 2003 के अंतर्गत अनिवार्य ISI प्रमाणन चिह्न होना अनिवार्य है।",
     },
     "is-1786-2008": {
         "code": "IS 1786 : 2008",
@@ -489,8 +538,8 @@ def get_bilingual_clause(standard_key_or_code: str, language: str = "en") -> str
     # Match standard numbers
     if "7098" in standard_key_or_code:
         return BILINGUAL_CLAUSES["is-7098-p1-1988"][lang]
-    elif "12269" in standard_key_or_code:
-        return BILINGUAL_CLAUSES["is-12269-2013"][lang]
+    elif "269" in standard_key_or_code or "12269" in standard_key_or_code or "8112" in standard_key_or_code:
+        return BILINGUAL_CLAUSES["is-269-2015"][lang]
     elif "1786" in standard_key_or_code:
         return BILINGUAL_CLAUSES["is-1786-2008"][lang]
     elif "13252" in standard_key_or_code:

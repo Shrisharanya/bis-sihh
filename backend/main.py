@@ -322,8 +322,8 @@ FALLBACK_PROCUREMENT_LINES = [
     },
     {
         "clause_no": "Clause 5.4",
-        "raw_text": "Ordinary Portland Cement 53 Grade shall strictly adhere to IS 12269 : 2013 and Cement QCO mandates.",
-        "cited_code": "IS 12269 : 2013",
+        "raw_text": "Ordinary Portland Cement 53 Grade shall strictly adhere to IS 269 : 2015 and Cement QCO mandates.",
+        "cited_code": "IS 269 : 2015",
     },
 ]
 
@@ -397,19 +397,59 @@ def evaluate_standard_citation(raw_code: str, context_text: str = "") -> Dict[st
             "rationale": "IS 432 mild steel plain bars lack high ductility and seismic proof stress mandates under Steel QCO 2024.",
         }
 
-    # Rule 3: IS 269 (Obsolete for structural high-strength concrete)
-    if "269" in norm_lower and "12269" not in norm_lower:
+    # Rule 3a: IS 12269 (Withdrawn & superseded by unified IS 269 : 2015)
+    if "12269" in norm_lower:
         return {
-            "cited_code": norm_code if ":" in norm_code else f"{norm_code} : 1976",
+            "cited_code": norm_code if ":" in norm_code else f"{norm_code} : 2013",
             "status": "SUPERSEDED_WITHDRAWN",
-            "replacement_code": "IS 12269 : 2013 (53 Grade OPC)",
+            "replacement_code": "IS 269 : 2015 (Unified Ordinary Portland Cement Specification)",
             "missing_tests": [
-                "IS 4031 (Part 6) - 28-day Compressive Strength Test",
+                "IS 4031 (Part 6) - 28-day Compressive Strength Test (53 Grade)",
                 "IS 4032 : 1985 - Chemical Composition Limits",
+                "IS 4987 : 1993 - Sampling and Lot Acceptance Criteria",
             ],
             "risk_severity": "CRITICAL",
-            "rationale": "IS 269:1976 is obsolete for 53 Grade high-strength concrete under Cement QCO 2003.",
+            "rationale": "IS 12269 was withdrawn by BIS following the revision of IS 269 : 2015, which unified 33, 43, and 53 Grade OPC under one standard.",
         }
+
+    # Rule 3b: IS 8112 (Withdrawn & superseded by unified IS 269 : 2015)
+    if "8112" in norm_lower:
+        return {
+            "cited_code": norm_code if ":" in norm_code else f"{norm_code} : 2013",
+            "status": "SUPERSEDED_WITHDRAWN",
+            "replacement_code": "IS 269 : 2015 (Unified Ordinary Portland Cement Specification)",
+            "missing_tests": [
+                "IS 4031 (Part 6) - Compressive Strength Test (43 Grade)",
+                "IS 4032 : 1985 - Chemical Composition Limits",
+                "IS 4987 : 1993 - Sampling and Lot Acceptance Criteria",
+            ],
+            "risk_severity": "CRITICAL",
+            "rationale": "IS 8112 was withdrawn by BIS following the revision of IS 269 : 2015, which unified 33, 43, and 53 Grade OPC under one standard.",
+        }
+
+    # Rule 3c: IS 269 (Active standard for 33, 43, and 53 Grade OPC; obsolete if citing pre-2015 editions)
+    if "269" in norm_lower and "12269" not in norm_lower:
+        if "1976" in norm_lower or "1989" in norm_lower or "1976" in ctx_lower or "1989" in ctx_lower:
+            return {
+                "cited_code": norm_code,
+                "status": "SUPERSEDED_WITHDRAWN",
+                "replacement_code": "IS 269 : 2015 (Unified Ordinary Portland Cement Specification)",
+                "missing_tests": [
+                    "IS 4031 (Part 6) - 28-day Compressive Strength Test",
+                    "IS 4032 : 1985 - Chemical Composition Limits",
+                ],
+                "risk_severity": "CRITICAL",
+                "rationale": "Older editions of IS 269 (1976, 1989) are superseded by IS 269 : 2015, which unified 33, 43, and 53 Grade OPC under one standard.",
+            }
+        else:
+            return {
+                "cited_code": norm_code if ":" in norm_code else "IS 269 : 2015",
+                "status": "COMPLIANT_ACTIVE",
+                "replacement_code": None,
+                "missing_tests": [],
+                "risk_severity": "LOW",
+                "rationale": "IS 269 : 2015 is current and active, unifying 33, 43, and 53 Grade OPC with mandatory Cement QCO 2003 compliance.",
+            }
 
     # Rule 4: IS 13252 (2003 edition without MeitY CRS or secondary lithium batteries)
     if "13252" in norm_lower and ("2003" in norm_lower or ("2010" not in norm_lower and "part 1" not in norm_lower)):
